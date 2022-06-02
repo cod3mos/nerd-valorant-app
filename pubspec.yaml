@@ -38,6 +38,7 @@ dependencies:
   
   shared_preferences: ^2.0.15
   flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +62,12 @@ flutter_icons:
   image_path: "assets/app/icon.png"
   adaptive_icon_foreground: "assets/app/icon_foreground.png"
   adaptive_icon_background: "assets/app/icon_background.png"
+
+flutter_native_splash:
+  ios: true
+  android: true
+  image: "assets/app/splash_icon.png"
+  background_image: "assets/app/splash_background.png"
 
 # The following section is specific to Flutter packages.
 flutter:
