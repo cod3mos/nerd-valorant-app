@@ -16,4 +16,12 @@ class ScreenSize {
   static double adaptiveFontSize(size) {
     return ((_mediaQueryData.size.width / 100) * size).ceilToDouble();
   }
+
+  static double width(size) {
+    return ((_mediaQueryData.size.width / 100) * size).ceilToDouble();
+  }
+
+  static double height(size) {
+    return ((_mediaQueryData.size.height / 100) * size).ceilToDouble();
+  }
 }
