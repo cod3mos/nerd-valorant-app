@@ -115,4 +115,4 @@ flutter:
         - asset: assets/fonts/Roboto/Roboto-Regular.ttf
     - family: Viga
       fonts:
-        - asset: assets/fonts/Roboto/Viga-Regular.ttf
+        - asset: assets/fonts/Viga/Viga-Regular.ttf
