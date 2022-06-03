@@ -59,7 +59,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 8,
+                  flex: 16,
                   child: Padding(
                     padding: EdgeInsets.all(ScreenSize.width(5)),
                     child: PageView.builder(
@@ -74,14 +74,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         return Column(
                           children: [
                             Expanded(
-                              flex: 4,
+                              flex: 8,
                               child: Image.asset(
                                 screenMedia[index].image,
                                 fit: BoxFit.contain,
                               ),
                             ),
                             Expanded(
-                              flex: 2,
+                              flex: 5,
                               child: Column(
                                 children: [
                                   Text(
@@ -100,7 +100,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               ),
                             ),
                             Expanded(
-                              flex: 3,
+                              flex: 6,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -125,7 +125,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 3,
                   child: Column(
                     children: [
                       Row(
