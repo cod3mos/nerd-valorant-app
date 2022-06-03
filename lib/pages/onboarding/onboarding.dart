@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
-// import 'package:nerdvalorant/mobile/local_storage.dart';
+import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/pages/onboarding/styles.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/pages/onboarding/screen_media.dart';
@@ -22,13 +22,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   void initState() {
     super.initState();
-    // LocalStorage.writeBool(key: 'seenIntro', data: true);
+    LocalStorage.writeBool(key: 'seenIntro', data: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    // final arguments = ModalRoute.of(context)?.settings.arguments ?? '';
-
     ScreenSize.init(context);
 
     AnimatedContainer dotIdicador(index) {
