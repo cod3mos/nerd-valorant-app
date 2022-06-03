@@ -43,138 +43,134 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
 
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenSize.width(5),
-        ),
-        child: Scaffold(
-          backgroundColor: blackColor,
-          body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(screenBackground),
-                fit: BoxFit.cover,
-              ),
+      child: Scaffold(
+        backgroundColor: blackColor,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(screenBackground),
+              fit: BoxFit.cover,
             ),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 16,
-                  child: Padding(
-                    padding: EdgeInsets.all(ScreenSize.width(5)),
-                    child: PageView.builder(
-                      controller: _pageController,
-                      onPageChanged: (value) {
-                        setState(() {
-                          currentScreen = value;
-                        });
-                      },
-                      itemCount: screenMedia.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Expanded(
-                              flex: 8,
-                              child: Image.asset(
-                                screenMedia[index].image,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    textAlign: TextAlign.left,
-                                    screenMedia[index].title,
-                                    style: titleStyle,
-                                  ),
-                                  SizedBox(height: ScreenSize.height(2)),
-                                  RichText(
-                                    textAlign: TextAlign.justify,
-                                    text: TextSpan(
-                                      children: screenMedia[index].description,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 6,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      for (var path in screenMedia[index].icons)
-                                        SizedBox(
-                                          width: ScreenSize.width(10),
-                                          height: ScreenSize.height(5),
-                                          child: SvgPicture.asset(path),
-                                        ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 20,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ScreenSize.width(5),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      Row(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (value) {
+                      setState(() {
+                        currentScreen = value;
+                      });
+                    },
+                    itemCount: screenMedia.length,
+                    itemBuilder: (context, index) {
+                      return Column(
                         children: [
                           Expanded(
-                            flex: 1,
-                            child: TextButton(
-                              onPressed: skipButton,
-                              style: skipButtonStyle,
-                              child: Text('Pular', style: textStyle),
+                            flex: 8,
+                            child: Image.asset(
+                              screenMedia[index].image,
+                              fit: BoxFit.contain,
                             ),
                           ),
                           Expanded(
-                            flex: 1,
-                            child: Row(
+                            flex: 5,
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                screenMedia.length,
-                                (index) => dotIdicador(index),
-                              ),
+                              children: [
+                                Text(
+                                  textAlign: TextAlign.left,
+                                  screenMedia[index].title,
+                                  style: titleStyle,
+                                ),
+                                SizedBox(height: ScreenSize.height(2)),
+                                RichText(
+                                  textAlign: TextAlign.justify,
+                                  text: TextSpan(
+                                    children: screenMedia[index].description,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Expanded(
-                            flex: 1,
-                            child: TextButton(
-                              onPressed: nextButton,
-                              style: nextButtonStyle,
-                              child: Text('Avançar', style: textStyle),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2),
-                            child: Text(
-                              'Versão 1.0.0',
-                              style: TextStyle(color: whiteColor),
+                            flex: 6,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    for (var path in screenMedia[index].icons)
+                                      SizedBox(
+                                        width: ScreenSize.width(10),
+                                        height: ScreenSize.height(5),
+                                        child: SvgPicture.asset(path),
+                                      ),
+                                  ],
+                                ),
+                              ],
                             ),
                           )
                         ],
-                      )
-                    ],
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: TextButton(
+                            onPressed: skipButton,
+                            style: skipButtonStyle,
+                            child: Text('Pular', style: textStyle),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              screenMedia.length,
+                              (index) => dotIdicador(index),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: TextButton(
+                            onPressed: nextButton,
+                            style: nextButtonStyle,
+                            child: Text('Avançar', style: textStyle),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Versão 1.0.0',
+                          style: TextStyle(color: whiteColor),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
