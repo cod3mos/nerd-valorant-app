@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:nerdvalorant/mobile/screen_size.dart';
+import 'package:nerdvalorant/themes/global_styles.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments ?? 'Login';
+    // final arguments = ModalRoute.of(context)?.settings.arguments ?? 'Login';
+
+    ScreenSize.init(context);
 
     return SafeArea(
       child: Scaffold(
@@ -14,32 +18,29 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '$arguments',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+                'Login',
+                style: TextStyle(
+                  color: blackColor,
+                  fontSize: 30,
                 ),
               ),
-              TextButton.icon(
-                label: const Text('Realizar login'),
-                onPressed: () => navigation(context, '/onboarding'),
-                icon: const Icon(
-                  Icons.navigate_before,
-                  color: Colors.red,
-                  size: 40,
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: TextButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: blackColor,
+                  ),
+                  child: Text(
+                    'Voltar para tela de introdução',
+                    style: TextStyle(color: whiteColor),
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, '/onboarding'),
                 ),
               )
             ],
           ),
         ),
       ),
-    );
-  }
-
-  void navigation(context, destiny) {
-    Navigator.pushNamed(
-      context,
-      destiny,
     );
   }
 }
