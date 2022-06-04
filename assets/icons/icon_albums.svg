@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>Albums</title><rect x="64" y="176" width="384" height="256" rx="28.87" ry="28.87" fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-width="20"/><path stroke="#FFFFFF" stroke-linecap="round" stroke-miterlimit="10" stroke-width="20" d="M144 80h224M112 128h288"/></svg>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M419.13 176H92.87C76.9255 176 64 188.926 64 204.87V403.13C64 419.074 76.9255 432 92.87 432H419.13C435.074 432 448 419.074 448 403.13V204.87C448 188.926 435.074 176 419.13 176Z" stroke="#FFFFFF" stroke-width="20" stroke-linejoin="round"/>
+<path d="M112 128H400Z" fill="#FFFFFF"/>
+<path d="M144 80H368M112 128H400" stroke="#FFFFFF" stroke-width="20" stroke-miterlimit="10" stroke-linecap="round"/>
+<path d="M193 240.563V367.438C193 375.068 200.437 379.915 206.562 376.258L315.019 311.346C320.321 308.174 320.321 299.826 315.019 296.654L206.562 231.743C200.437 228.085 193 232.933 193 240.563Z" stroke="#FFFFFF" stroke-width="20" stroke-miterlimit="10"/>
+</svg>
