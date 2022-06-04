@@ -19,40 +19,41 @@ class ScreenMedia {
 List<ScreenMedia> screenMedia = [
   ScreenMedia(
     image: screenImageViper,
-    title: 'Bem vindo, pronto para aumentar suas vitórias?',
+    title: 'PRONTO PARA SAIR DESTA SEQUÊNCIA DE DERROTAS?',
     description: [
       TextSpan(
-        text: 'Supreenda seus inimigos utilizando nossos pixels e aumente suas',
+        text: 'Supreenda seus adversários utilizando nossos pixels ',
         style: subtitleStyle,
       ),
       TextSpan(
-        text: ' VITÓRIAS.',
+        text: 'e aumente suas ',
+        style: subtitleStyle,
+      ),
+      TextSpan(
+        text: 'VITÓRIAS.',
         style: subtitleBoldStyle,
       ),
     ],
     icons: [
-      iconAlbums,
-      iconArrowForward,
       iconNerdValorant,
+      iconArrowForward,
+      iconAlbums,
       iconArrowForward,
       iconTrophy,
     ],
   ),
   ScreenMedia(
     image: screenImageCypher,
-    title: 'Mapa, agente, defender ou atacar',
+    title: 'BASTA SELECIONAR O MAPA, AGENTE E O MODO DE JOGO',
     description: [
       TextSpan(
-        text: 'Aplique o filtro e selecione o ',
+        text:
+            'Simples né? da tempos de comprar armas, habilidades e ainda sobra para uns ',
         style: subtitleStyle,
       ),
       TextSpan(
-        text: 'PIXEL ',
+        text: 'PIXELS.',
         style: subtitleBoldStyle,
-      ),
-      TextSpan(
-        text: 'perfeito para a sua jogada.',
-        style: subtitleStyle,
       ),
     ],
     icons: [
@@ -65,7 +66,7 @@ List<ScreenMedia> screenMedia = [
   ),
   ScreenMedia(
     image: screenImageKilljoy,
-    title: 'Participe da nossa comunidade no Instagram',
+    title: 'GOSTOU? ENTÃO FAÇA PARTE DESTA COMUNIDADE',
     description: [
       TextSpan(
         text: 'Siga-nos no instagram e fique por dentro das novidades ',
@@ -77,9 +78,9 @@ List<ScreenMedia> screenMedia = [
       ),
     ],
     icons: [
-      iconChatboxEllipses,
-      iconArrowForward,
       iconInstagram,
+      iconArrowForward,
+      iconChatboxEllipses,
       iconArrowForward,
       iconNerdValorant,
     ],

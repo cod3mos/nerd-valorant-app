@@ -88,7 +88,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                   screenMedia[index].title,
                                   style: titleStyle,
                                 ),
-                                SizedBox(height: ScreenSize.height(2)),
+                                SizedBox(height: ScreenSize.height(1.5)),
                                 RichText(
                                   textAlign: TextAlign.justify,
                                   text: TextSpan(

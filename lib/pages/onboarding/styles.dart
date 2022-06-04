@@ -4,16 +4,9 @@ import 'package:nerdvalorant/themes/global_styles.dart';
 
 final titleStyle = TextStyle(
   color: whiteColor,
-  fontFamily: 'Roboto',
-  fontWeight: FontWeight.bold,
-  fontSize: ScreenSize.adaptiveFontSize(7),
-);
-
-final titleBoldStyle = TextStyle(
-  color: whiteColor,
-  fontFamily: 'Roboto',
-  fontWeight: FontWeight.bold,
-  fontSize: ScreenSize.adaptiveFontSize(7),
+  fontFamily: 'Viga',
+  fontWeight: FontWeight.normal,
+  fontSize: ScreenSize.adaptiveFontSize(6.5),
 );
 
 final textStyle = TextStyle(
