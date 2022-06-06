@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:nerdvalorant/keys/version.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
@@ -158,15 +159,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Versão 1.0.0',
-                          style: TextStyle(color: whiteColor),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: ScreenSize.height(1)),
+                      child: Text(
+                        'Versão $version',
+                        style: TextStyle(
+                          color: whiteColor,
                         ),
-                      ],
-                    )
+                      ),
+                    ),
                   ],
                 ),
               ),
