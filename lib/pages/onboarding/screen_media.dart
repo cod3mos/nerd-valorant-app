@@ -19,14 +19,11 @@ class ScreenMedia {
 List<ScreenMedia> screenMedia = [
   ScreenMedia(
     image: screenImageViper,
-    title: 'PRONTO PARA SAIR DESTA SEQUÊNCIA DE DERROTAS?',
+    title: 'ERRANDO MUITO PIXEL EM PARTIDAS DECICIVAS?',
     description: [
       TextSpan(
-        text: 'Supreenda seus adversários utilizando nossos pixels ',
-        style: subtitleStyle,
-      ),
-      TextSpan(
-        text: 'e aumente suas ',
+        text:
+            'Supreenda seus adversários, utilize nosso aplicativo e aumente suas ',
         style: subtitleStyle,
       ),
       TextSpan(
@@ -48,7 +45,7 @@ List<ScreenMedia> screenMedia = [
     description: [
       TextSpan(
         text:
-            'Simples né? da tempos de comprar armas, habilidades e ainda sobra para uns ',
+            'Fácil né? tempo suficiente para comprar armas, habilidades e escolher uns ',
         style: subtitleStyle,
       ),
       TextSpan(
