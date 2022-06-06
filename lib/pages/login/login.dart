@@ -13,8 +13,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenSize.init(context);
 
-    print(ScreenSize.height(8));
-
     return SafeArea(
       child: Scaffold(
         body: Container(
