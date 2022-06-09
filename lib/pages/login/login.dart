@@ -1,17 +1,43 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:nerdvalorant/keys/links.dart';
+import 'package:provider/provider.dart';
 import 'package:nerdvalorant/keys/version.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/login/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
+import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
+
+    Future<void> login() async {
+      ScaffoldMessenger.of(context).clearSnackBars();
+
+      try {
+        await context.read<GoogleSignInProvider>().googleLogin();
+      } on AuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message),
+            backgroundColor: blackColor,
+          ),
+        );
+      }
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -35,6 +61,7 @@ class LoginPage extends StatelessWidget {
                   width: 280,
                   height: 48,
                   child: TextButton(
+                    onPressed: () => login(),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -62,8 +89,6 @@ class LoginPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/onboarding'),
                   ),
                 ),
                 SizedBox(
@@ -80,6 +105,9 @@ class LoginPage extends StatelessWidget {
                         TextSpan(
                           text: 'Termos',
                           style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap =
+                                () => openLink('$baseLink/terms-coditions'),
                         ),
                         TextSpan(
                           text:
@@ -89,6 +117,9 @@ class LoginPage extends StatelessWidget {
                         TextSpan(
                           text: 'Política de Privacidade',
                           style: linkStyle,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap =
+                                () => openLink('$baseLink/privacy-policy'),
                         ),
                         TextSpan(
                           text: '.',
@@ -113,5 +144,13 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> openLink(link) async {
+    final Uri uri = Uri.parse(link);
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'link inválido';
+    }
   }
 }
