@@ -2,8 +2,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:nerdvalorant/keys/version.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
-import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
+import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/onboarding/styles.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/pages/onboarding/screen_media.dart';
@@ -23,7 +23,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   void initState() {
     super.initState();
-    LocalStorage.writeBool(key: 'seenIntro', data: true);
+
+    _readOnBoarding();
+  }
+
+  Future<void> _readOnBoarding() async {
+    await LocalStorage.writeBool(key: 'seenIntro', data: true);
   }
 
   @override
@@ -64,9 +69,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   child: PageView.builder(
                     controller: _pageController,
                     onPageChanged: (value) {
-                      setState(() {
-                        currentScreen = value;
-                      });
+                      setState(() => currentScreen = value);
                     },
                     itemCount: screenMedia.length,
                     itemBuilder: (context, index) {
@@ -134,7 +137,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Expanded(
                           flex: 1,
                           child: TextButton(
-                            onPressed: skipButton,
+                            onPressed: () => skipButton(),
                             style: skipButtonStyle,
                             child: Text('Pular', style: textStyle),
                           ),
@@ -152,7 +155,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         Expanded(
                           flex: 1,
                           child: TextButton(
-                            onPressed: nextButton,
+                            onPressed: () => nextButton(),
                             style: nextButtonStyle,
                             child: Text('Avançar', style: textStyle),
                           ),
@@ -179,12 +182,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void skipButton() {
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/verify_auth');
   }
 
   void nextButton() {
     if (currentScreen == screenMedia.length - 1) {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/verify_auth');
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 400),
