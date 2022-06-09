@@ -19,7 +19,7 @@ class ScreenMedia {
 List<ScreenMedia> screenMedia = [
   ScreenMedia(
     image: screenImageViper,
-    title: 'ERRANDO MUITO PIXEL EM PARTIDAS DECICIVAS?',
+    title: 'ERRANDO MUITO PIXEL EM PARTIDAS DESCICIVAS?',
     description: [
       TextSpan(
         text:
