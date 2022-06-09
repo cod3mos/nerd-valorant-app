@@ -48,6 +48,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
       );
     }
 
+    setCurrentPage(index) => setState(() => currentScreen = index);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: blackColor,
@@ -68,9 +70,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                   child: PageView.builder(
                     controller: _pageController,
-                    onPageChanged: (value) {
-                      setState(() => currentScreen = value);
-                    },
+                    onPageChanged: setCurrentPage,
                     itemCount: screenMedia.length,
                     itemBuilder: (context, index) {
                       return Column(
@@ -139,7 +139,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           child: TextButton(
                             onPressed: () => skipButton(),
                             style: skipButtonStyle,
-                            child: Text('Pular', style: textStyle),
+                            child: Text(
+                              'Pular',
+                              style: textStyle,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -157,7 +160,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           child: TextButton(
                             onPressed: () => nextButton(),
                             style: nextButtonStyle,
-                            child: Text('Avançar', style: textStyle),
+                            child: Text(
+                              'Avançar',
+                              style: textStyle,
+                            ),
                           ),
                         ),
                       ],
