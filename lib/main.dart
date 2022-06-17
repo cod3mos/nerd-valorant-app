@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:nerdvalorant/pages/home/home.dart';
 import 'package:nerdvalorant/pages/login/login.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
-import 'package:nerdvalorant/pages/dashboard/dashboard.dart';
+import 'package:nerdvalorant/mobile/local_notifications.dart';
+import 'package:nerdvalorant/services/firebase_messaging.dart';
 import 'package:nerdvalorant/pages/onboarding/onboarding.dart';
 
 void main() async {
@@ -19,7 +21,15 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (context) => NotificationService(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => GoogleSignInProvider(),
+        ),
+        Provider(
+          create: (context) => FirebaseMessageService(
+            context.read<NotificationService>(),
+          ),
         ),
       ],
       child: const NerdValorantApp(),
@@ -27,8 +37,31 @@ void main() async {
   );
 }
 
-class NerdValorantApp extends StatelessWidget {
+class NerdValorantApp extends StatefulWidget {
   const NerdValorantApp({Key? key}) : super(key: key);
+
+  @override
+  State<NerdValorantApp> createState() => _NerdValorantAppState();
+}
+
+class _NerdValorantAppState extends State<NerdValorantApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    _initializeFirebaseMessaging();
+    _checkNotifications();
+  }
+
+  _initializeFirebaseMessaging() async {
+    await Provider.of<FirebaseMessageService>(context, listen: false)
+        .initialize();
+  }
+
+  _checkNotifications() async {
+    await Provider.of<NotificationService>(context, listen: false)
+        .checkForNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +97,7 @@ class _VerifyAuthState extends State<VerifyAuth> {
   void initState() {
     super.initState();
 
-    setState(() => alreadyViewed = LocalStorage.readBool('seenIntro'));
+    alreadyViewed = LocalStorage.readBool('seenIntro');
   }
 
   @override
@@ -80,7 +113,7 @@ class _VerifyAuthState extends State<VerifyAuth> {
     } else if (auth.googleUser == null) {
       return alreadyViewed ? const LoginPage() : const OnboardingPage();
     } else {
-      return const DashboardPage();
+      return const HomePage();
     }
   }
 }

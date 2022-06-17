@@ -5,7 +5,6 @@ import 'package:nerdvalorant/themes/global_styles.dart';
 final titleStyle = TextStyle(
   color: whiteColor,
   fontFamily: 'Viga',
-  fontWeight: FontWeight.normal,
   fontSize: ScreenSize.adaptiveFontSize(6.5),
 );
 

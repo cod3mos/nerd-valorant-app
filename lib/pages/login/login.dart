@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:nerdvalorant/keys/links.dart';
 import 'package:provider/provider.dart';
+import 'package:nerdvalorant/keys/links.dart';
 import 'package:nerdvalorant/keys/version.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/login/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
