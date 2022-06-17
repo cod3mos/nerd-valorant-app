@@ -51,15 +51,13 @@ class NotificationService extends ChangeNotifier {
 
     notificationsStorage.add(notification);
 
-    if (!LocalStorage.readBool('airplane_mode')) {
-      localNotifications.show(
-        notification.id,
-        notification.title,
-        notification.body,
-        NotificationDetails(android: androidDetails),
-        payload: notification.payload,
-      );
-    }
+    localNotifications.show(
+      notification.id,
+      notification.title,
+      notification.body,
+      NotificationDetails(android: androidDetails),
+      payload: notification.payload,
+    );
 
     await LocalStorage.writeNotifications(notificationsStorage);
 

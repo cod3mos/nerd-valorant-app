@@ -2,27 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
-import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/settings/styles.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
-
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  late bool notify;
-
-  @override
-  void initState() {
-    super.initState();
-
-    notify = LocalStorage.readBool('airplane_mode');
-  }
 
   @override
   Widget build(BuildContext context) {

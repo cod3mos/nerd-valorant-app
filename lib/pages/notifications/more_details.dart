@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
-import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/settings/styles.dart';
+import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class MoreDetailsPage extends StatefulWidget {
   const MoreDetailsPage({Key? key}) : super(key: key);
