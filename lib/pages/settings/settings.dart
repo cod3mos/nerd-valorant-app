@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
@@ -27,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     ScreenSize.init(context);
 
-    final userName = ModalRoute.of(context)?.settings.arguments ?? '';
+    final user = ModalRoute.of(context)?.settings.arguments as User;
 
     return SafeArea(
       child: Scaffold(
@@ -66,7 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       width: ScreenSize.width(2),
                     ),
                     Text(
-                      'Configurações do perfil',
+                      'Detalhes do conta',
                       style: titleStyle,
                     ),
                   ],
@@ -93,11 +94,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Nome de perfil',
+                              'Nome do usuário',
                               style: textStyle,
                             ),
                             Text(
-                              '$userName',
+                              '${user.displayName}',
                               style: textBoldStyle,
                             ),
                           ],
@@ -107,23 +108,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Bloquear notificações',
+                              'E-mail',
                               style: textStyle,
                             ),
-                            Switch(
-                              value: notify,
-                              onChanged: (value) async {
-                                setState(() => notify = value);
-                                await LocalStorage.writeBool(
-                                  key: 'airplane_mode',
-                                  data: value,
-                                );
-                              },
-                              activeColor: greenColor,
-                              inactiveTrackColor: whiteColor,
+                            Text(
+                              '${user.email}',
+                              style: textBoldStyle,
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ],

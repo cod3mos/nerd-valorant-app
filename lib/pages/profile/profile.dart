@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nerdvalorant/models/notify_details.dart';
-import 'package:nerdvalorant/mobile/local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/links.dart';
@@ -43,8 +41,8 @@ class ProfilePage extends StatelessWidget {
       return names[0][0] + names[1][0];
     }
 
-    void goToPage(page) {
-      Navigator.pushNamed(context, page, arguments: user.displayName);
+    void goToPage(page, data) {
+      Navigator.pushNamed(context, page, arguments: data);
     }
 
     return SafeArea(
@@ -138,17 +136,17 @@ class ProfilePage extends StatelessWidget {
                       ProfileButton(
                         icon: Ionicons.card_outline,
                         text: 'Plano de assinatura',
-                        onTouch: () => goToPage('/subscriptions'),
+                        onTouch: () => goToPage('/subscriptions', null),
                       ),
                       ProfileButton(
                         icon: Ionicons.person_outline,
-                        text: 'Configurações do perfil',
-                        onTouch: () => goToPage('/settings'),
+                        text: 'Detalhes do conta',
+                        onTouch: () => goToPage('/settings', user),
                       ),
                       ProfileButton(
                         icon: Ionicons.notifications_outline,
                         text: 'Notificações',
-                        onTouch: () => goToPage('/notifications'),
+                        onTouch: () => goToPage('/notifications', null),
                       ),
                       ProfileButton(
                         icon: Ionicons.heart_outline,
