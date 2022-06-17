@@ -18,8 +18,8 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   late List<NotifyDetails> notifyDetails;
 
-  NotifyDetails? deletedItem;
   int? deletedIndex;
+  NotifyDetails? deletedItem;
 
   @override
   void initState() {
@@ -121,18 +121,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void openMessage(NotifyDetails notify) {
+  void openMessage(NotifyDetails notify) async {
     setState(() => notifyDetails[notifyDetails.indexOf(notify)].setReady(true));
-
-    LocalStorage.writeNotifications(notifyDetails);
 
     Navigator.pushNamed(context, '/more_details', arguments: notify);
+
+    await LocalStorage.writeNotifications(notifyDetails);
   }
 
-  void onReady(NotifyDetails notify) {
+  void onReady(NotifyDetails notify) async {
     setState(() => notifyDetails[notifyDetails.indexOf(notify)].setReady(true));
-
-    LocalStorage.writeNotifications(notifyDetails);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -149,15 +147,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ),
       ),
     );
+
+    await LocalStorage.writeNotifications(notifyDetails);
   }
 
-  void onDelete(NotifyDetails notify) {
+  void onDelete(NotifyDetails notify) async {
     deletedItem = notify;
     deletedIndex = notifyDetails.indexOf(notify);
 
     setState(() => notifyDetails.remove(notify));
-
-    LocalStorage.writeNotifications(notifyDetails);
 
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -183,5 +181,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ),
       ),
     );
+
+    await LocalStorage.writeNotifications(notifyDetails);
   }
 }

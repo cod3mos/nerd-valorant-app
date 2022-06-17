@@ -5,10 +5,8 @@ import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService extends ChangeNotifier {
-  List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
-
-  late FlutterLocalNotificationsPlugin localNotifications;
   late AndroidNotificationDetails androidDetails;
+  late FlutterLocalNotificationsPlugin localNotifications;
 
   NotificationService() {
     localNotifications = FlutterLocalNotificationsPlugin();
@@ -20,9 +18,7 @@ class NotificationService extends ChangeNotifier {
     const android = AndroidInitializationSettings('icon_notification');
 
     await localNotifications.initialize(
-      const InitializationSettings(
-        android: android,
-      ),
+      const InitializationSettings(android: android),
       onSelectNotification: _onSelectNotification,
     );
   }
@@ -42,6 +38,8 @@ class NotificationService extends ChangeNotifier {
   }
 
   showNotification(NotifyDetails notification) async {
+    List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
+
     androidDetails = const AndroidNotificationDetails(
       'notificacoes_firebase',
       'notificacoes',
@@ -53,15 +51,17 @@ class NotificationService extends ChangeNotifier {
 
     notificationsStorage.add(notification);
 
-    await LocalStorage.writeNotifications(notificationsStorage);
+    if (!LocalStorage.readBool('airplane_mode')) {
+      localNotifications.show(
+        notification.id,
+        notification.title,
+        notification.body,
+        NotificationDetails(android: androidDetails),
+        payload: notification.payload,
+      );
+    }
 
-    localNotifications.show(
-      notification.id,
-      notification.title,
-      notification.body,
-      NotificationDetails(android: androidDetails),
-      payload: notification.payload,
-    );
+    await LocalStorage.writeNotifications(notificationsStorage);
 
     notifyListeners();
   }

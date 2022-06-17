@@ -6,8 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:nerdvalorant/mobile/local_notifications.dart';
 
 class FirebaseMessageService {
-  List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
-
   final NotificationService _notificationService;
 
   FirebaseMessageService(this._notificationService);
@@ -45,6 +43,8 @@ class FirebaseMessageService {
   }
 
   _getOfflineMessage(message) async {
+    List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
+
     if (message != null) {
       RemoteNotification? notification = message.notification;
       String pageRoute = message.data['route'] ?? '/notifications';
