@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nerdvalorant/main.dart';
 import 'package:nerdvalorant/pages/home/home.dart';
 import 'package:nerdvalorant/pages/settings/settings.dart';
+import 'package:nerdvalorant/pages/pixels/youtube_player.dart';
 import 'package:nerdvalorant/pages/notifications/more_details.dart';
 import 'package:nerdvalorant/pages/subscriptions/subscriptions.dart';
 import 'package:nerdvalorant/pages/notifications/notifications.dart';
@@ -15,6 +16,8 @@ class Routes {
     '/more_details': (context) => const MoreDetailsPage(),
     '/notifications': (context) => const NotificationsPage(),
     '/subscriptions': (context) => const SubscriptionsPage(),
+    '/youtube_player': (context) => YoutubeVideoPlayer(
+        videoId: ModalRoute.of(context)!.settings.arguments as String),
   };
 
   static String initialRoute = '/verify_auth';

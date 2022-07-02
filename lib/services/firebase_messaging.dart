@@ -18,6 +18,8 @@ class FirebaseMessageService {
       alert: true,
     );
 
+    FirebaseMessaging.instance.getToken().then((value) => debugPrint(value));
+
     FirebaseMessaging.instance.getInitialMessage().then(_getOfflineMessage);
 
     _onMessage();
