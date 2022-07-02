@@ -18,7 +18,8 @@ final textStyle = TextStyle(
 final emailStyle = TextStyle(
   color: whiteColor,
   fontFamily: 'Roboto',
-  fontSize: ScreenSize.adaptiveFontSize(5),
+  fontWeight: FontWeight.w300,
+  fontSize: ScreenSize.adaptiveFontSize(4.5),
 );
 
 final avatarUserStyle = TextStyle(
