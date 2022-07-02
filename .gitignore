@@ -49,3 +49,4 @@ app.*.map.json
 
 # Ignore this files
 /android/app/google-services.json
+/lib/keys/keys.dart

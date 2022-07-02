@@ -30,3 +30,8 @@ Para suporte, mande um email para contato@codemos.com.br.
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
+
+## Funcionalidades a serem implementadas
+
+- Tornar o icone de notificação da tela de pixels funcional.
+- Adicionar botão de reporte para quando o pixel estiver desatualizado.
