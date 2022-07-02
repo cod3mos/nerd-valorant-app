@@ -52,7 +52,7 @@ class SettingsPage extends StatelessWidget {
                       width: ScreenSize.width(2),
                     ),
                     Text(
-                      'Detalhes do conta',
+                      'Detalhes da conta',
                       style: titleStyle,
                     ),
                   ],
@@ -79,7 +79,7 @@ class SettingsPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Nome do usuário',
+                              'Nome do usuário:',
                               style: textStyle,
                             ),
                             Text(
@@ -93,7 +93,7 @@ class SettingsPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'E-mail',
+                              'E-mail:',
                               style: textStyle,
                             ),
                             Text(

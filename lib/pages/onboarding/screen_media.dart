@@ -23,7 +23,7 @@ List<ScreenMedia> screenMedia = [
     description: [
       TextSpan(
         text:
-            'Supreenda seus adversários, utilize nosso aplicativo e aumente suas ',
+            'Supreenda seus adversários, utilizando nosso app e aumente suas ',
         style: subtitleStyle,
       ),
       TextSpan(
@@ -45,7 +45,7 @@ List<ScreenMedia> screenMedia = [
     description: [
       TextSpan(
         text:
-            'Fácil né? tempo suficiente para comprar armas, habilidades e escolher uns ',
+            'Fácil né? Tempo suficiente para comprar armas, habilidades e escolher uns ',
         style: subtitleStyle,
       ),
       TextSpan(
