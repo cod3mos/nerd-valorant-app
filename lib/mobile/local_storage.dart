@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:nerdvalorant/models/youtube_video.dart';
 import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String notifications = 'notifications';
+String videos = 'favorite_videos';
 
 class LocalStorage {
   static late SharedPreferences _localStorage;
@@ -32,10 +34,22 @@ class LocalStorage {
   }
 
   static List<NotifyDetails> readNotifications() {
-    final String notifyString = _localStorage.getString(notifications) ?? '[]';
+    final String listInString = _localStorage.getString(notifications) ?? '[]';
 
-    final List notifyList = json.decode(notifyString) as List;
+    final List notifyList = json.decode(listInString) as List;
 
     return notifyList.map((notify) => NotifyDetails.fromJson(notify)).toList();
+  }
+
+  static Future<void> writeFavoriteVideos(List<YoutubeVideo> videosList) async {
+    await _localStorage.setString(videos, json.encode(videosList));
+  }
+
+  static List<YoutubeVideo> readFavoriteVideos() {
+    final String listInString = _localStorage.getString(videos) ?? '[]';
+
+    final List videosList = json.decode(listInString) as List;
+
+    return videosList.map((video) => YoutubeVideo.fromJson(video)).toList();
   }
 }
