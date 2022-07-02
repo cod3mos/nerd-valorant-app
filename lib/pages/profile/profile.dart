@@ -41,8 +41,8 @@ class ProfilePage extends StatelessWidget {
       return names[0][0] + names[1][0];
     }
 
-    void goToPage(page, data) {
-      Navigator.pushNamed(context, page, arguments: data);
+    void goToPage({route, data = ''}) {
+      Navigator.pushNamed(context, route, arguments: data);
     }
 
     return SafeArea(
@@ -136,17 +136,17 @@ class ProfilePage extends StatelessWidget {
                       ProfileButton(
                         icon: Ionicons.card_outline,
                         text: 'Plano de assinatura',
-                        onTouch: () => goToPage('/subscriptions', null),
+                        onTouch: () => goToPage(route: '/subscriptions'),
                       ),
                       ProfileButton(
                         icon: Ionicons.person_outline,
-                        text: 'Detalhes do conta',
-                        onTouch: () => goToPage('/settings', user),
+                        text: 'Detalhes da conta',
+                        onTouch: () => goToPage(route: '/settings', data: user),
                       ),
                       ProfileButton(
                         icon: Ionicons.notifications_outline,
                         text: 'Notificações',
-                        onTouch: () => goToPage('/notifications', null),
+                        onTouch: () => goToPage(route: '/notifications'),
                       ),
                       ProfileButton(
                         icon: Ionicons.heart_outline,
@@ -178,7 +178,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       ProfileButton(
                         icon: Ionicons.reader_outline,
-                        text: 'Termos e Condições',
+                        text: 'Termos & Condições',
                         onTouch: () => openLink('$baseLink/terms-coditions'),
                       ),
                       ProfileButton(
@@ -188,7 +188,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                       ProfileButton(
                         icon: Ionicons.logo_instagram,
-                        text: 'Siga-nos no instagram',
+                        text: 'Siga-nos no Instagram',
                         onTouch: () => openLink(instagram),
                       ),
                     ],
