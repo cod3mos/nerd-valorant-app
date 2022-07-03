@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
@@ -26,6 +28,9 @@ class _PixelsPageState extends State<PixelsPage> {
   YoutubeChannel? channel;
   bool isLoading = false;
   int videoCount = 0;
+  RewardedAd? rewardedAd;
+  late BannerAd bannerAd;
+  late AdRequest adRequest;
 
   @override
   void initState() {
@@ -34,6 +39,83 @@ class _PixelsPageState extends State<PixelsPage> {
     videos = LocalStorage.readFavoriteVideos();
 
     _fetchChannel();
+
+    adRequest = const AdRequest(keywords: ['games', 'valorant']);
+
+    BannerAdListener bannerAdListener = BannerAdListener(onAdClosed: (ad) {
+      bannerAd.load();
+    }, onAdFailedToLoad: (ad, error) {
+      bannerAd.load();
+    });
+
+    setState(() {
+      bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: bannerAdKey,
+        listener: bannerAdListener,
+        request: adRequest,
+      );
+    });
+
+    bannerAd.load();
+
+    initializeRewardedAd();
+  }
+
+  void initializeRewardedAd() {
+    RewardedAdLoadCallback rewardAd = RewardedAdLoadCallback(onAdLoaded: (ad) {
+      rewardedAd = ad;
+    }, onAdFailedToLoad: (LoadAdError error) {
+      rewardedAd = null;
+    });
+
+    RewardedAd.load(
+      adUnitId: rewardedAdKey,
+      rewardedAdLoadCallback: rewardAd,
+      request: adRequest,
+    );
+  }
+
+  void showRewarded(YoutubeVideo video) {
+    if (rewardedAd != null) {
+      rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdShowedFullScreenContent: (RewardedAd ad) {},
+        onAdDismissedFullScreenContent: (RewardedAd ad) {
+          ad.dispose();
+
+          initializeRewardedAd();
+        },
+        onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError err) {
+          ad.dispose();
+
+          initializeRewardedAd();
+        },
+      );
+
+      rewardedAd!.setImmersiveMode(true);
+      rewardedAd!.show(
+        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
+          int isFavorite = videos.indexWhere((item) => item.id == video.id);
+
+          setState(() => video.favorited = isFavorite != -1);
+
+          isFavorite == -1 ? videos.add(video) : videos.removeAt(isFavorite);
+
+          await LocalStorage.writeFavoriteVideos(videos);
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    bannerAd.dispose();
+
+    if (rewardedAd != null) {
+      rewardedAd!.dispose();
+    }
+
+    super.dispose();
   }
 
   _fetchChannel() async {
@@ -143,7 +225,7 @@ class _PixelsPageState extends State<PixelsPage> {
                                             video: video,
                                             favoriteMode: false,
                                             title: channel!.title,
-                                            onFavorite: favoriteOrDisfavor,
+                                            onFavorite: showRewarded,
                                           ),
                                         ),
                                       );
@@ -184,16 +266,6 @@ class _PixelsPageState extends State<PixelsPage> {
         ),
       ),
     );
-  }
-
-  favoriteOrDisfavor(YoutubeVideo video) async {
-    int isFavorite = videos.indexWhere((item) => item.id == video.id);
-
-    setState(() => video.favorited = isFavorite != -1);
-
-    isFavorite == -1 ? videos.add(video) : videos.removeAt(isFavorite);
-
-    await LocalStorage.writeFavoriteVideos(videos);
   }
 
   Future showFilter() async {

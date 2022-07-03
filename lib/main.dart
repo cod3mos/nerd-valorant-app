@@ -5,8 +5,10 @@ import 'package:nerdvalorant/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nerdvalorant/pages/home/home.dart';
 import 'package:nerdvalorant/pages/login/login.dart';
+import 'package:nerdvalorant/DB/mongo_database.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/mobile/local_notifications.dart';
 import 'package:nerdvalorant/services/firebase_messaging.dart';
@@ -15,7 +17,10 @@ import 'package:nerdvalorant/pages/onboarding/onboarding.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.wait([LocalStorage.init(), Firebase.initializeApp()]);
+  await LocalStorage.init();
+  await MongoDatabase.connect();
+  await Firebase.initializeApp();
+  await MobileAds.instance.initialize();
 
   runApp(
     MultiProvider(

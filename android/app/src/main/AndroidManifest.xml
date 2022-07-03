@@ -4,6 +4,11 @@
         android:label="Nerd Valorant"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7609736782077030~5551518423"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
