@@ -4,8 +4,8 @@ import 'package:ionicons/ionicons.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
-import 'package:nerdvalorant/models/youtube_video.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PixelVideoItem extends StatelessWidget {
@@ -28,6 +28,10 @@ class PixelVideoItem extends StatelessWidget {
       return 'assets/images/profiles/${title.split(' | ')[0].toLowerCase()}.png';
     }
 
+    String removeFirstName(String title) {
+      return title.split(' | ').getRange(1, 3).join(' | ');
+    }
+
     String publishedAt(dateInString) {
       DateTime date = DateTime.parse(dateInString);
 
@@ -38,7 +42,7 @@ class PixelVideoItem extends StatelessWidget {
       FlutterShare.share(
         title: video.title,
         text:
-            'Baixe o app Nerd Valorant para ver todos os pixels disponíveis\n\nhttps://www.youtube.com/watch?v=${video.id}_channel=${title.split(' ').join('')}',
+            'Baixe o app Nerd Valorant para ver todos os pixels disponíveis\n\nhttps://www.youtube.com/watch?v=${video.videoId}_channel=$title',
       );
     }
 
@@ -128,7 +132,7 @@ class PixelVideoItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                video.title,
+                                removeFirstName(video.title),
                                 maxLines: 1,
                                 overflow: TextOverflow.clip,
                                 style: titleTextStyle,

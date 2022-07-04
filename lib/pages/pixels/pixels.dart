@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/keys.dart';
+import 'package:nerdvalorant/DB/mongo_database.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
-import 'package:nerdvalorant/models/youtube_video.dart';
 import 'package:nerdvalorant/widgets/loading_item.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
-import 'package:nerdvalorant/models/youtube_channel.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
-import 'package:nerdvalorant/services/google_api_youtube.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_modal_item.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_video_item.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_banner_item.dart';
+import 'package:provider/provider.dart';
 
 class PixelsPage extends StatefulWidget {
   const PixelsPage({Key? key}) : super(key: key);
@@ -23,20 +23,19 @@ class PixelsPage extends StatefulWidget {
 }
 
 class _PixelsPageState extends State<PixelsPage> {
-  late List<YoutubeVideo> videos;
-  String querySearch = '';
-  YoutubeChannel? channel;
-  bool isLoading = false;
+  int page = 1;
   int videoCount = 0;
+  bool isLoading = true;
   RewardedAd? rewardedAd;
   late BannerAd bannerAd;
+  YoutubeChannel? channel;
   late AdRequest adRequest;
+  List<String> querySearch = [];
+  late List<YoutubeVideo> videos;
 
   @override
   void initState() {
     super.initState();
-
-    videos = LocalStorage.readFavoriteVideos();
 
     _fetchChannel();
 
@@ -77,7 +76,9 @@ class _PixelsPageState extends State<PixelsPage> {
   }
 
   void showRewarded(YoutubeVideo video) {
-    if (rewardedAd != null) {
+    int isFavorite = videos.indexWhere((item) => item.videoId == video.videoId);
+
+    if (rewardedAd != null && isFavorite == -1) {
       rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (RewardedAd ad) {},
         onAdDismissedFullScreenContent: (RewardedAd ad) {
@@ -94,16 +95,17 @@ class _PixelsPageState extends State<PixelsPage> {
 
       rewardedAd!.setImmersiveMode(true);
       rewardedAd!.show(
-        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async {
-          int isFavorite = videos.indexWhere((item) => item.id == video.id);
-
+        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
           setState(() => video.favorited = isFavorite != -1);
 
           isFavorite == -1 ? videos.add(video) : videos.removeAt(isFavorite);
 
-          await LocalStorage.writeFavoriteVideos(videos);
+          context.read<LocalStorageService>().writeFavoriteVideos(videos);
         },
       );
+    } else {
+      videos.removeAt(isFavorite);
+      context.read<LocalStorageService>().writeFavoriteVideos(videos);
     }
   }
 
@@ -119,16 +121,20 @@ class _PixelsPageState extends State<PixelsPage> {
   }
 
   _fetchChannel() async {
-    final youtubeChannel = await GoogleApiYoutube.instance.fetchChannel();
-
-    setState(() => channel = youtubeChannel);
-  }
-
-  searchVideos(String search) async {
     setState(() => isLoading = true);
 
-    final videos = await GoogleApiYoutube.instance
-        .fetchVideos(channel!.uploadPlaylistId, search);
+    final response = await MongoDatabase.fetchChannel();
+
+    setState(() {
+      channel = response;
+      isLoading = false;
+    });
+  }
+
+  searchVideos(List<String> search) async {
+    setState(() => isLoading = true);
+
+    final videos = await MongoDatabase.fetchVideos(0, search);
 
     setState(() {
       channel!.videos = videos;
@@ -136,12 +142,9 @@ class _PixelsPageState extends State<PixelsPage> {
     });
   }
 
-  loadMoreVideos() async {
-    setState(() => isLoading = true);
-
-    List<YoutubeVideo> videos = await GoogleApiYoutube.instance
-        .fetchVideos(channel!.uploadPlaylistId, querySearch);
-
+  loadMoreVideos(int currentPage) async {
+    List<YoutubeVideo> videos =
+        await MongoDatabase.fetchVideos(currentPage, querySearch);
     List<YoutubeVideo> videoList = channel!.videos..addAll(videos);
 
     setState(() {
@@ -150,12 +153,18 @@ class _PixelsPageState extends State<PixelsPage> {
     });
   }
 
-  openVideo({id}) {
+  openVideo(id) {
     Navigator.pushNamed(context, '/youtube_player', arguments: id);
+  }
+
+  checkLocalStorageService() {
+    videos = context.watch<LocalStorageService>().favoriteVideos;
   }
 
   @override
   Widget build(BuildContext context) {
+    checkLocalStorageService();
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
@@ -183,6 +192,11 @@ class _PixelsPageState extends State<PixelsPage> {
           child: Column(
             children: [
               PixelBannerItem(channel: channel),
+              SizedBox(
+                height: ScreenSize.height(7),
+                width: ScreenSize.screenWidth,
+                child: AdWidget(ad: bannerAd),
+              ),
               channel != null && !isLoading
                   ? channel!.videos.isNotEmpty
                       ? Expanded(
@@ -191,12 +205,14 @@ class _PixelsPageState extends State<PixelsPage> {
                               bool isNotLoading = !isLoading;
                               ScrollMetrics metrics = scroll.metrics;
                               bool haveMore =
-                                  channel!.videos.length < channel!.videoCount;
+                                  channel!.videos.length != channel!.videoCount;
                               bool finishedList =
-                                  metrics.pixels != metrics.maxScrollExtent;
+                                  metrics.pixels == metrics.maxScrollExtent;
 
                               if (isNotLoading && haveMore && finishedList) {
-                                loadMoreVideos();
+                                int currentPage = page++;
+                                loadMoreVideos(currentPage);
+                                setState(() => page = page++);
                               }
 
                               return false;
@@ -211,12 +227,13 @@ class _PixelsPageState extends State<PixelsPage> {
                                           channel!.videos[index];
 
                                       int isFavorite = videos.indexWhere(
-                                          (item) => item.id == video.id);
+                                          (item) =>
+                                              item.videoId == video.videoId);
 
                                       video.favorited = isFavorite != -1;
 
                                       return GestureDetector(
-                                        onTap: () => openVideo(id: video.id),
+                                        onTap: () => openVideo(video.videoId),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                             vertical: ScreenSize.height(1),
@@ -277,8 +294,11 @@ class _PixelsPageState extends State<PixelsPage> {
         child: PixelModalItem(
           filter: (List<String> search) {
             Navigator.pop(context);
-            searchVideos(search.join(' ').trim());
-            setState(() => querySearch = search.join(' ').trim());
+
+            search.removeWhere((item) => [''].contains(item));
+
+            searchVideos(search);
+            setState(() => querySearch = search);
           },
         ),
       ),

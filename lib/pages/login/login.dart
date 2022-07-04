@@ -49,98 +49,94 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  logoNerdValorant,
-                  width: ScreenSize.width(60),
-                  height: ScreenSize.screenHeight * .65,
-                ),
-                SizedBox(
-                  width: 280,
-                  height: 48,
-                  child: TextButton(
-                    onPressed: () => login(),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(
-                            color: whiteColor,
-                          ),
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                logoNerdValorant,
+                width: ScreenSize.width(60),
+                height: ScreenSize.screenHeight * .65,
+              ),
+              SizedBox(
+                width: 280,
+                height: 48,
+                child: TextButton(
+                  onPressed: () => login(),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(
+                          color: whiteColor,
                         ),
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: ScreenSize.width(7),
-                          height: ScreenSize.width(7),
-                          child: SvgPicture.asset(iconGoogle),
-                        ),
-                        SizedBox(
-                          width: ScreenSize.width(5),
-                        ),
-                        Text(
-                          'Entrar com o google',
-                          style: googleButtonStyle,
-                        ),
-                      ],
-                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: ScreenSize.width(7),
+                        height: ScreenSize.width(7),
+                        child: SvgPicture.asset(iconGoogle),
+                      ),
+                      SizedBox(
+                        width: ScreenSize.width(5),
+                      ),
+                      Text(
+                        'Entrar com o google',
+                        style: googleButtonStyle,
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: ScreenSize.screenWidth * .8,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text:
-                              'Ao tocar em entrar, você concorda com os nossos ',
-                          style: termStyle,
-                        ),
-                        TextSpan(
-                          text: 'Termos',
-                          style: linkStyle,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => openLink('$baseLink/terms-coditions'),
-                        ),
-                        TextSpan(
-                          text:
-                              '. Saiba como processamos seus dados em nossa  ',
-                          style: termStyle,
-                        ),
-                        TextSpan(
-                          text: 'Política de Privacidade',
-                          style: linkStyle,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => openLink('$baseLink/privacy-policy'),
-                        ),
-                        TextSpan(
-                          text: '.',
-                          style: termStyle,
-                        ),
-                      ],
-                    ),
+              ),
+              SizedBox(
+                width: ScreenSize.screenWidth * .8,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            'Ao tocar em entrar, você concorda com os nossos ',
+                        style: termStyle,
+                      ),
+                      TextSpan(
+                        text: 'Termos',
+                        style: linkStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => openLink('$baseLink/terms-coditions'),
+                      ),
+                      TextSpan(
+                        text: '. Saiba como processamos seus dados em nossa  ',
+                        style: termStyle,
+                      ),
+                      TextSpan(
+                        text: 'Política de Privacidade',
+                        style: linkStyle,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => openLink('$baseLink/privacy-policy'),
+                      ),
+                      TextSpan(
+                        text: '.',
+                        style: termStyle,
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: ScreenSize.height(1)),
-                  child: Text(
-                    'Versão $version',
-                    style: TextStyle(
-                      color: whiteColor,
-                    ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: ScreenSize.height(1)),
+                child: Text(
+                  'Versão $version',
+                  style: TextStyle(
+                    color: whiteColor,
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            ],
+          )),
         ),
       ),
     );

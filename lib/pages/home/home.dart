@@ -18,14 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPage = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pageController = PageController(initialPage: currentPage);
-  }
 
   setCurrentPage(page) => setState(() => currentPage = page);
 
@@ -36,14 +28,13 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () => turnBack(),
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: setCurrentPage,
+        body: IndexedStack(
+          index: currentPage,
           children: const [
             PixelsPage(),
             FavoritesPage(),
             HalftonesPage(),
-            ProfilePage(),
+            ProfilePage()
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -52,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: blackColor,
           selectedItemColor: greenColor,
           unselectedItemColor: whiteColor,
-          onTap: (page) => goToPage(page),
+          onTap: (page) => setCurrentPage(page),
           items: [
             BottomNavigationBarItem(
               activeIcon: NavigationItem(icon: iconAlbums, color: greenColor),
@@ -77,17 +68,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void goToPage(page) {
-    _pageController.animateToPage(
-      page,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.ease,
-    );
-  }
-
   Future<bool> turnBack() async {
     if (currentPage != 0) {
-      goToPage(0);
+      setCurrentPage(0);
       return false;
     }
 

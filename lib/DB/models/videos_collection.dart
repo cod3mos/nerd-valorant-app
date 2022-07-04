@@ -1,6 +1,20 @@
+class YoutubeChannel {
+  final String title;
+  final int videoCount;
+
+  List<YoutubeVideo> videos;
+
+  YoutubeChannel({
+    required this.title,
+    required this.videos,
+    required this.videoCount,
+  });
+}
+
 class YoutubeVideo {
   final String id;
   final String title;
+  final String videoId;
   final String tumbnail;
   final String description;
   final String publishedAt;
@@ -10,23 +24,26 @@ class YoutubeVideo {
   YoutubeVideo({
     required this.id,
     required this.title,
+    required this.videoId,
     required this.tumbnail,
     required this.favorited,
     required this.description,
     required this.publishedAt,
   });
 
-  YoutubeVideo.fromMap(Map<String, dynamic> snippet)
-      : id = snippet['id'],
-        title = snippet['title'],
-        tumbnail = snippet['thumbnail'],
+  YoutubeVideo.fromDB(Map<String, dynamic> db)
+      : id = db['_id'].$oid,
+        title = db['title'],
+        videoId = db['video_id'],
+        tumbnail = db['tumbnail'],
         favorited = false,
-        description = snippet['description'],
-        publishedAt = snippet['publishedAt'];
+        description = db['description'],
+        publishedAt = db['published_at'];
 
   YoutubeVideo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
+        videoId = json['videoId'],
         tumbnail = json['tumbnail'],
         favorited = json['favorited'],
         description = json['description'],
@@ -35,6 +52,7 @@ class YoutubeVideo {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
+        'videoId': videoId,
         'tumbnail': tumbnail,
         'favorited': favorited,
         'description': description,

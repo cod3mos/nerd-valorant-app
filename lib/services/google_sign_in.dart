@@ -13,7 +13,6 @@ class GoogleSignInProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User? googleUser;
-  bool isLoading = true;
 
   GoogleSignInProvider() {
     _googleCheck();
@@ -22,7 +21,6 @@ class GoogleSignInProvider extends ChangeNotifier {
   _googleCheck() {
     _auth.authStateChanges().listen((User? user) {
       googleUser = (user == null) ? null : user;
-      isLoading = false;
 
       notifyListeners();
     });

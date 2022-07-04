@@ -7,6 +7,7 @@ import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/pages/notifications/styles.dart';
 import 'package:nerdvalorant/pages/notifications/widgets/notify_message.dart';
+import 'package:provider/provider.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -25,12 +26,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
 
-    notifyDetails = LocalStorage.readNotifications();
+    context.read<LocalStorageService>().readNotifications();
+  }
+
+  checkLocalStorageService() {
+    notifyDetails = context.watch<LocalStorageService>().localNotifications;
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
+
+    checkLocalStorageService();
 
     return SafeArea(
       child: Scaffold(
@@ -121,15 +128,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void openMessage(NotifyDetails notify) async {
+  void openMessage(NotifyDetails notify) {
     setState(() => notifyDetails[notifyDetails.indexOf(notify)].setReady(true));
 
-    Navigator.pushNamed(context, '/more_details', arguments: notify);
+    context.read<LocalStorageService>().writeNotifications(notifyDetails);
 
-    await LocalStorage.writeNotifications(notifyDetails);
+    Navigator.pushNamed(context, '/more_details', arguments: notify);
   }
 
-  void onReady(NotifyDetails notify) async {
+  void onReady(NotifyDetails notify) {
     setState(() => notifyDetails[notifyDetails.indexOf(notify)].setReady(true));
 
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -148,10 +155,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
     );
 
-    await LocalStorage.writeNotifications(notifyDetails);
+    context.read<LocalStorageService>().writeNotifications(notifyDetails);
   }
 
-  void onDelete(NotifyDetails notify) async {
+  void onDelete(NotifyDetails notify) {
     deletedItem = notify;
     deletedIndex = notifyDetails.indexOf(notify);
 
@@ -171,7 +178,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
           onPressed: () {
             setState(() => notifyDetails.insert(deletedIndex!, deletedItem!));
 
-            LocalStorage.writeNotifications(notifyDetails);
+            context
+                .read<LocalStorageService>()
+                .writeNotifications(notifyDetails);
           },
           label: 'Desfazer',
           textColor: whiteColor,
@@ -182,6 +191,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
     );
 
-    await LocalStorage.writeNotifications(notifyDetails);
+    context.read<LocalStorageService>().writeNotifications(notifyDetails);
   }
 }

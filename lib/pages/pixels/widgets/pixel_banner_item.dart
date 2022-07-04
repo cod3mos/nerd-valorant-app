@@ -1,25 +1,53 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
+import 'package:nerdvalorant/mobile/local_storage.dart';
+import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
-import 'package:nerdvalorant/models/youtube_channel.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 
-class PixelBannerItem extends StatelessWidget {
+class PixelBannerItem extends StatefulWidget {
   const PixelBannerItem({Key? key, required this.channel}) : super(key: key);
 
   final YoutubeChannel? channel;
 
   @override
+  State<PixelBannerItem> createState() => _PixelBannerItemState();
+}
+
+class _PixelBannerItemState extends State<PixelBannerItem> {
+  late User user;
+  late List<NotifyDetails> notifyDetails;
+
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<LocalStorageService>().readFavoriteVideos();
+  }
+
+  checkLocalStorageService() {
+    user = context.watch<GoogleSignInProvider>().googleUser!;
+    notifyDetails = context.watch<LocalStorageService>().localNotifications;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    User user = context.read<GoogleSignInProvider>().googleUser!;
+    checkLocalStorageService();
 
     String displayName(List<String> names) => names.getRange(0, 2).join(' ');
 
     goToNotifications() => Navigator.pushNamed(context, '/notifications');
+
+    hasNotificationNotRead(List<NotifyDetails> list) {
+      return list.where((item) => item.ready == false).toList().isEmpty;
+    }
+
+    hasNotificationNotRead(notifyDetails);
 
     return Container(
       height: ScreenSize.height(15),
@@ -72,7 +100,9 @@ class PixelBannerItem extends StatelessWidget {
                 IconButton(
                   onPressed: () => goToNotifications(),
                   icon: SvgPicture.asset(
-                    iconNotification,
+                    hasNotificationNotRead(notifyDetails)
+                        ? iconNotification
+                        : iconNotificationAlert,
                     height: ScreenSize.width(8),
                   ),
                 ),
@@ -90,7 +120,7 @@ class PixelBannerItem extends StatelessWidget {
                 children: [
                   const TextSpan(text: 'Contamos com '),
                   TextSpan(
-                    text: '${channel?.videoCount ?? '0'}',
+                    text: '${widget.channel?.videoCount ?? '0'}',
                     style: bannerSubtitleBoldStyle,
                   ),
                   const TextSpan(text: ' pixels disponíveis'),

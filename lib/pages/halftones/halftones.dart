@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
@@ -39,7 +40,7 @@ class _HalftonesPageState extends State<HalftonesPage> {
         size: AdSize.banner,
         adUnitId: bannerAdKey,
         listener: bannerAdListener,
-        request: const AdRequest(keywords: ['s', 'd']),
+        request: const AdRequest(keywords: ['games', 'valorant']),
       );
     });
 
@@ -54,10 +55,9 @@ class _HalftonesPageState extends State<HalftonesPage> {
   }
 
   _halftonesList() async {
-    final response = await MongoDatabase.list();
-    setState(() {
-      halftones = response;
-    });
+    final response = await MongoDatabase.fetchHalftones();
+
+    setState(() => halftones = response);
   }
 
   @override
@@ -76,116 +76,125 @@ class _HalftonesPageState extends State<HalftonesPage> {
             children: [
               const HalftonesBannerItem(),
               Expanded(
-                flex: 9,
                 child: ListView(
                   children: [
                     for (var halftone in halftones)
                       Padding(
-                        padding: EdgeInsets.all(ScreenSize.height(2)),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: ScreenSize.height(13),
-                              width: ScreenSize.screenWidth,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                border: Border.all(
-                                  color: whiteColor,
-                                  width: 2.0,
+                        padding: EdgeInsets.symmetric(
+                          vertical: ScreenSize.height(.5),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ScreenSize.width(1),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: ScreenSize.height(13),
+                                width: ScreenSize.screenWidth,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(
+                                    color: whiteColor,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5.0),
                                 ),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.all(ScreenSize.width(3)),
-                                      child: Container(
-                                        width: ScreenSize.width(30),
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image:
-                                                NetworkImage(halftone.imageUrl),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          border: Border.all(
-                                            color: whiteColor,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(
-                                              ScreenSize.width(2),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.all(ScreenSize.width(3)),
+                                        child: Container(
+                                          width: ScreenSize.width(30),
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: CachedNetworkImageProvider(
+                                                halftone.imageUrl,
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            border: Border.all(
+                                              color: whiteColor,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(
+                                                ScreenSize.width(2),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 7,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              halftone.name,
-                                              style: halftoneTitleStyle,
-                                            ),
-                                            IconButton(
-                                              onPressed: () {
-                                                halftoneCopied(halftone);
-                                              },
-                                              icon: Icon(
-                                                Ionicons.copy_outline,
-                                                color: whiteColor,
+                                    Expanded(
+                                      flex: 7,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                halftone.name,
+                                                style: halftoneTitleStyle,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'CÓDIGO DA RETÍCULA',
-                                              style: halftoneTextStyle,
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  right: ScreenSize.width(4),
-                                                ),
-                                                child: Text(
-                                                  halftone.halftoneCode,
-                                                  style: halftoneCodeTextStyle,
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                              IconButton(
+                                                onPressed: () {
+                                                  halftoneCopied(halftone);
+                                                },
+                                                icon: Icon(
+                                                  Ionicons.copy_outline,
+                                                  color: whiteColor,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'CÓDIGO DA RETÍCULA',
+                                                style: halftoneTextStyle,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                    right: ScreenSize.width(4),
+                                                  ),
+                                                  child: Text(
+                                                    halftone.halftoneCode,
+                                                    style:
+                                                        halftoneCodeTextStyle,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                   ],
                 ),
               ),
-              Expanded(
-                flex: 1,
+              SizedBox(
+                height: ScreenSize.height(7),
+                width: ScreenSize.screenWidth,
                 child: AdWidget(ad: bannerAd),
               ),
             ],

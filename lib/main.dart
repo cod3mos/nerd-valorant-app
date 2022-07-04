@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/routes/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nerdvalorant/pages/home/home.dart';
 import 'package:nerdvalorant/pages/login/login.dart';
@@ -17,16 +18,23 @@ import 'package:nerdvalorant/pages/onboarding/onboarding.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await LocalStorage.init();
-  await MongoDatabase.connect();
-  await Firebase.initializeApp();
-  await MobileAds.instance.initialize();
+  await Future.wait([
+    MongoDatabase.connect(),
+    Firebase.initializeApp(),
+    LocalStorageService.init(),
+    MobileAds.instance.initialize(),
+  ]);
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => NotificationService(),
+          create: (context) => LocalStorageService(), // alterar nome
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationService(
+            context.read<LocalStorageService>(),
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) => GoogleSignInProvider(),
@@ -34,6 +42,7 @@ void main() async {
         Provider(
           create: (context) => FirebaseMessageService(
             context.read<NotificationService>(),
+            context.read<LocalStorageService>(),
           ),
         ),
       ],
@@ -96,26 +105,26 @@ class VerifyAuth extends StatefulWidget {
 }
 
 class _VerifyAuthState extends State<VerifyAuth> {
+  late User? googleUser;
   late bool alreadyViewed;
 
   @override
   void initState() {
     super.initState();
 
-    alreadyViewed = LocalStorage.readBool('seenIntro');
+    context.read<LocalStorageService>().readSeenIntro();
+  }
+
+  checkLocalStorageService() {
+    googleUser = context.watch<GoogleSignInProvider>().googleUser;
+    alreadyViewed = context.watch<LocalStorageService>().alreadyViewed;
   }
 
   @override
   Widget build(BuildContext context) {
-    GoogleSignInProvider auth = Provider.of<GoogleSignInProvider>(context);
+    checkLocalStorageService();
 
-    if (auth.isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else if (auth.googleUser == null) {
+    if (googleUser == null) {
       return alreadyViewed ? const LoginPage() : const OnboardingPage();
     } else {
       return const HomePage();

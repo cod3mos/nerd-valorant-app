@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
-import 'package:nerdvalorant/models/youtube_video.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/favorites/styles.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_video_item.dart';
+import 'package:provider/provider.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
@@ -17,8 +18,8 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  late List<YoutubeVideo> videos;
   late BannerAd bannerAd;
+  late List<YoutubeVideo> videos;
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     bannerAd.load();
 
-    videos = LocalStorage.readFavoriteVideos();
+    context.read<LocalStorageService>().readFavoriteVideos();
   }
 
   @override
@@ -50,20 +51,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
     super.dispose();
   }
 
+  checkLocalStorageService() {
+    videos = context.watch<LocalStorageService>().favoriteVideos;
+  }
+
   @override
   Widget build(BuildContext context) {
-    openVideo({id}) {
+    checkLocalStorageService();
+
+    openVideo(id) {
       Navigator.pushNamed(context, '/youtube_player', arguments: id);
     }
 
-    favoriteOrDisfavor(YoutubeVideo video) async {
-      int isFavorite = videos.indexWhere((item) => item.id == video.id);
+    favoriteOrDisfavor(YoutubeVideo video) {
+      int isFavorite =
+          videos.indexWhere((item) => item.videoId == video.videoId);
 
       isFavorite == -1 ? videos.add(video) : videos.removeAt(isFavorite);
 
       setState(() => videos = videos);
 
-      await LocalStorage.writeFavoriteVideos(videos);
+      context.read<LocalStorageService>().writeFavoriteVideos(videos);
     }
 
     return Scaffold(
@@ -79,14 +87,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
             children: [
               videos.isNotEmpty
                   ? Expanded(
-                      flex: 9,
                       child: ListView.builder(
                         itemCount: videos.length,
                         itemBuilder: (context, int index) {
                           YoutubeVideo video = videos[index];
 
                           return GestureDetector(
-                            onTap: () => openVideo(id: video.id),
+                            onTap: () => openVideo(video.videoId),
                             child: Padding(
                               padding: EdgeInsets.only(
                                 bottom: ScreenSize.height(1),
@@ -103,7 +110,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       ),
                     )
                   : Expanded(
-                      flex: 9,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -122,8 +128,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         ],
                       ),
                     ),
-              Expanded(
-                flex: 1,
+              SizedBox(
+                height: ScreenSize.height(7),
+                width: ScreenSize.screenWidth,
                 child: AdWidget(ad: bannerAd),
               ),
             ],

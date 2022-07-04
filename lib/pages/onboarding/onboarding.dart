@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nerdvalorant/keys/version.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
@@ -19,17 +20,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   int currentScreen = 0;
 
   final PageController _pageController = PageController(initialPage: 0);
-
-  @override
-  void initState() {
-    super.initState();
-
-    _readOnBoarding();
-  }
-
-  Future<void> _readOnBoarding() async {
-    await LocalStorage.writeBool(key: 'seenIntro', data: true);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +110,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       );
                     },
@@ -188,12 +178,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void skipButton() {
-    Navigator.pushReplacementNamed(context, '/verify_auth');
+    context.read<LocalStorageService>().writeSeenIntro(true);
   }
 
   void nextButton() {
     if (currentScreen == screenMedia.length - 1) {
-      Navigator.pushReplacementNamed(context, '/verify_auth');
+      context.read<LocalStorageService>().writeSeenIntro(true);
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 400),

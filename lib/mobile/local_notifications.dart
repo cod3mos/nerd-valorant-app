@@ -5,10 +5,11 @@ import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService extends ChangeNotifier {
+  final LocalStorageService _localStorage;
   late AndroidNotificationDetails androidDetails;
   late FlutterLocalNotificationsPlugin localNotifications;
 
-  NotificationService() {
+  NotificationService(this._localStorage) {
     localNotifications = FlutterLocalNotificationsPlugin();
 
     _initializeNotifications();
@@ -38,7 +39,7 @@ class NotificationService extends ChangeNotifier {
   }
 
   showNotification(NotifyDetails notification) async {
-    List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
+    List<NotifyDetails> notifications = _localStorage.localNotifications;
 
     androidDetails = const AndroidNotificationDetails(
       'notificacoes_firebase',
@@ -49,7 +50,7 @@ class NotificationService extends ChangeNotifier {
       enableVibration: true,
     );
 
-    notificationsStorage.add(notification);
+    notifications.add(notification);
 
     localNotifications.show(
       notification.id,
@@ -59,7 +60,7 @@ class NotificationService extends ChangeNotifier {
       payload: notification.payload,
     );
 
-    await LocalStorage.writeNotifications(notificationsStorage);
+    await _localStorage.writeNotifications(notifications);
 
     notifyListeners();
   }

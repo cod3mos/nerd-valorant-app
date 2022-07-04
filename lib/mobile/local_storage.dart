@@ -1,55 +1,72 @@
 import 'dart:convert';
-import 'package:nerdvalorant/models/youtube_video.dart';
+import 'package:flutter/material.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String notifications = 'notifications';
+String seenIntro = 'seenIntro';
 String videos = 'favorite_videos';
+String notifications = 'local_notifications';
 
-class LocalStorage {
+class LocalStorageService extends ChangeNotifier {
   static late SharedPreferences _localStorage;
 
   static Future init() async {
     _localStorage = await SharedPreferences.getInstance();
   }
 
-  static Future writeString({required String key, required String data}) async {
-    await _localStorage.setString(key, data);
+  // Already Viewed
+
+  bool alreadyViewed = false;
+
+  readSeenIntro() {
+    alreadyViewed = _localStorage.getBool(seenIntro) ?? false;
   }
 
-  static Future writeBool({required String key, required bool data}) async {
-    await _localStorage.setBool(key, data);
+  Future<void> writeSeenIntro(bool data) async {
+    await _localStorage.setBool(seenIntro, data);
+
+    await readSeenIntro();
+
+    notifyListeners();
   }
 
-  static String readString(String key) {
-    return _localStorage.getString(key) ?? '';
-  }
+  // Notifications
 
-  static bool readBool(String key) {
-    return _localStorage.getBool(key) ?? false;
-  }
+  List<NotifyDetails> localNotifications = [];
 
-  static Future<void> writeNotifications(List<NotifyDetails> notifyList) async {
-    await _localStorage.setString(notifications, json.encode(notifyList));
-  }
-
-  static List<NotifyDetails> readNotifications() {
+  readNotifications() {
     final String listInString = _localStorage.getString(notifications) ?? '[]';
 
-    final List notifyList = json.decode(listInString) as List;
+    final List list = json.decode(listInString) as List;
 
-    return notifyList.map((notify) => NotifyDetails.fromJson(notify)).toList();
+    localNotifications =
+        list.map((item) => NotifyDetails.fromJson(item)).toList();
   }
 
-  static Future<void> writeFavoriteVideos(List<YoutubeVideo> videosList) async {
-    await _localStorage.setString(videos, json.encode(videosList));
+  Future<void> writeNotifications(List<NotifyDetails> notifyList) async {
+    await _localStorage.setString(notifications, json.encode(notifyList));
+    await readNotifications();
+
+    notifyListeners();
   }
 
-  static List<YoutubeVideo> readFavoriteVideos() {
+  // Favorite Videos
+
+  List<YoutubeVideo> favoriteVideos = [];
+
+  readFavoriteVideos() {
     final String listInString = _localStorage.getString(videos) ?? '[]';
 
-    final List videosList = json.decode(listInString) as List;
+    final List list = json.decode(listInString) as List;
 
-    return videosList.map((video) => YoutubeVideo.fromJson(video)).toList();
+    favoriteVideos = list.map((item) => YoutubeVideo.fromJson(item)).toList();
+  }
+
+  Future<void> writeFavoriteVideos(List<YoutubeVideo> videosList) async {
+    await _localStorage.setString(videos, json.encode(videosList));
+    await readFavoriteVideos();
+
+    notifyListeners();
   }
 }

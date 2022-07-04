@@ -6,9 +6,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:nerdvalorant/mobile/local_notifications.dart';
 
 class FirebaseMessageService {
+  final LocalStorageService _localStorage;
   final NotificationService _notificationService;
 
-  FirebaseMessageService(this._notificationService);
+  FirebaseMessageService(this._notificationService, this._localStorage);
 
   Future<void> initialize() async {
     await FirebaseMessaging.instance
@@ -17,8 +18,6 @@ class FirebaseMessageService {
       sound: true,
       alert: true,
     );
-
-    FirebaseMessaging.instance.getToken().then((value) => debugPrint(value));
 
     FirebaseMessaging.instance.getInitialMessage().then(_getOfflineMessage);
 
@@ -45,7 +44,7 @@ class FirebaseMessageService {
   }
 
   _getOfflineMessage(message) async {
-    List<NotifyDetails> notificationsStorage = LocalStorage.readNotifications();
+    List<NotifyDetails> notifications = _localStorage.localNotifications;
 
     if (message != null) {
       RemoteNotification? notification = message.notification;
@@ -53,7 +52,7 @@ class FirebaseMessageService {
       AndroidNotification? android = message.notification?.android;
 
       if (notification != null && android != null) {
-        notificationsStorage.add(
+        notifications.add(
           NotifyDetails(
             id: android.hashCode,
             title: notification.title!,
@@ -63,7 +62,7 @@ class FirebaseMessageService {
           ),
         );
 
-        await LocalStorage.writeNotifications(notificationsStorage);
+        await _localStorage.writeNotifications(notifications);
 
         Navigator.of(Routes.navigatorKey.currentContext!).pushNamed(pageRoute);
       }

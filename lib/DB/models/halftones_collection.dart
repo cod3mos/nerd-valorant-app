@@ -1,7 +1,5 @@
-import 'package:mongo_dart/mongo_dart.dart';
-
 class HalftonesCollection {
-  ObjectId id;
+  String id;
   String name;
   String imageUrl;
   String halftoneCode;
@@ -14,7 +12,7 @@ class HalftonesCollection {
   });
 
   HalftonesCollection.fromDB(Map<String, dynamic> db)
-      : id = db['_id'],
+      : id = db['_id'].$oid,
         name = db['name'],
         imageUrl = db['image_url'],
         halftoneCode = db['halftone_code'];
