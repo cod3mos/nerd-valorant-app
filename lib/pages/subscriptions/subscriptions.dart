@@ -191,6 +191,27 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                             ),
                           ],
                         ),
+                        if (isUserPremium)
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: ScreenSize.height(10),
+                              ),
+                              Image.asset(
+                                stickerSage,
+                                width: ScreenSize.width(30),
+                              ),
+                              SizedBox(
+                                height: ScreenSize.height(2),
+                              ),
+                              Text(
+                                'Agradecemos a sua assinatura, agora você é um Radiante e sua missão é aproveitar muito nosso app!',
+                                style: textStyle,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
                       ],
                     ),
                   ],
