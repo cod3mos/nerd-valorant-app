@@ -39,7 +39,13 @@ class _PixelBannerItemState extends State<PixelBannerItem> {
   Widget build(BuildContext context) {
     checkLocalStorageService();
 
-    String displayName(List<String> names) => names.getRange(0, 2).join(' ');
+    String displayName(List<String> names) {
+      if (names.length > 1) {
+        return names.getRange(0, 2).join(' ');
+      } else {
+        return names.join(' ');
+      }
+    }
 
     goToNotifications() => Navigator.pushNamed(context, '/notifications');
 
