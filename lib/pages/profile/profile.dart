@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:provider/provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/links.dart';
@@ -12,14 +13,37 @@ import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nerdvalorant/pages/profile/widgets/profile_button.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late User user;
+  bool isUserPremium = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    user = context.read<GoogleSignInProvider>().googleUser!;
+  }
+
+  checkPlanPurchasesService() {
+    final accessType = context.watch<PlanPurchasesService>().accessType;
+
+    if (accessType != null) {
+      setState(() => isUserPremium = accessType.isNotEmpty);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
 
-    User user = context.read<GoogleSignInProvider>().googleUser!;
+    checkPlanPurchasesService();
 
     void logout() async {
       try {
@@ -101,19 +125,29 @@ class ProfilePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Assinante ',
-                          style: TextStyle(
-                            color: whiteColor,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Assinante ',
+                                style: textPremiumStyle,
+                              ),
+                              TextSpan(
+                                text:
+                                    isUserPremium ? 'Radiante ' : 'Sem Patente',
+                                style: isUserPremium
+                                    ? textPremiumBoldStyle
+                                    : textPremiumStyle,
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          'Sem Patente',
-                          style: TextStyle(
-                            color: whiteColor,
-                            decoration: TextDecoration.underline,
+                        if (isUserPremium)
+                          Icon(
+                            Ionicons.diamond_outline,
+                            color: blueColor,
+                            size: ScreenSize.adaptiveFontSize(3.5),
                           ),
-                        ),
                       ],
                     ),
                   ],

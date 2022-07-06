@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
+import 'package:nerdvalorant/pages/subscriptions/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
-import 'package:nerdvalorant/pages/settings/styles.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
+import 'package:provider/provider.dart';
+import 'package:purchases_flutter/models/offering_wrapper.dart';
+import 'package:nerdvalorant/pages/subscriptions/widgets/subscriptions_modal_item.dart';
+import 'package:purchases_flutter/models/package_wrapper.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
@@ -13,9 +18,42 @@ class SubscriptionsPage extends StatefulWidget {
 }
 
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
+  bool isUserPremium = false;
+  List<Offering> offering = [];
+  String planAmount = 'R\$ 0,00';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchOffering();
+  }
+
+  _fetchOffering() => context.read<PlanPurchasesService>().fetchOffers();
+
+  checkPlanPurchasesService() {
+    offering = context.watch<PlanPurchasesService>().offering;
+
+    final accessType = context.watch<PlanPurchasesService>().accessType;
+
+    if (accessType != null) {
+      final packages = getPackages();
+
+      int index =
+          packages.indexWhere((item) => item.product.identifier == accessType);
+
+      setState(() {
+        isUserPremium = accessType.isNotEmpty;
+        planAmount = packages[index].product.priceString;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
+
+    checkPlanPurchasesService();
 
     return SafeArea(
       child: Scaffold(
@@ -65,15 +103,43 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                 child: Column(
                   children: [
                     Image.asset(
-                      stickerOmen,
+                      isUserPremium ? stickerSova : stickerOmen,
                       width: ScreenSize.width(30),
                     ),
-                    SizedBox(height: ScreenSize.height(2)),
-                    Text(
-                      'Assinante Sem Patente',
-                      style: textStyle,
+                    SizedBox(
+                      height: ScreenSize.height(2),
                     ),
-                    SizedBox(height: ScreenSize.height(2)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Assinante ',
+                                style: textPremiumStyle,
+                              ),
+                              TextSpan(
+                                text:
+                                    isUserPremium ? 'Radiante ' : 'Sem Patente',
+                                style: isUserPremium
+                                    ? textPremiumBoldStyle
+                                    : textPremiumStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isUserPremium)
+                          Icon(
+                            Ionicons.diamond_outline,
+                            color: blueColor,
+                            size: ScreenSize.adaptiveFontSize(4),
+                          ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: ScreenSize.height(2),
+                    ),
                     Container(
                       decoration: const BoxDecoration(
                         border: Border(
@@ -86,7 +152,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                     ),
                     Column(
                       children: [
-                        SizedBox(height: ScreenSize.height(1)),
+                        SizedBox(
+                          height: ScreenSize.height(1),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -95,7 +163,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                               style: textStyle,
                             ),
                             TextButton(
-                              onPressed: () => {},
+                              onPressed: showOfferings,
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.transparent,
                                 onPrimary: greenColor,
@@ -107,20 +175,22 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: ScreenSize.height(1)),
+                        SizedBox(
+                          height: ScreenSize.height(1),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Assinatura Mensal',
+                              'Valor do plano atual:',
                               style: textStyle,
                             ),
                             Text(
-                              'R\$ 0,00',
+                              planAmount,
                               style: textStyle,
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ],
@@ -128,6 +198,32 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  List<Package> getPackages() {
+    return offering
+        .map((offers) => offers.availablePackages)
+        .expand((pair) => pair)
+        .toList();
+  }
+
+  Future showOfferings() async {
+    final packages = getPackages();
+
+    await showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => SizedBox(
+        height: ScreenSize.height(65),
+        child: SubscriptionsModalItem(
+          onClickedPackage: (package) async {
+            Navigator.pop(context);
+            await context.read<PlanPurchasesService>().signPlan(package);
+          },
+          packages: packages,
         ),
       ),
     );

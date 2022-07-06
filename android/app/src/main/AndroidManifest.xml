@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nerdvalorant">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="br.com.codemos.nerdvalorant">
    <application
         android:label="Nerd Valorant"
         android:name="${applicationName}"

@@ -3,6 +3,7 @@ import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/favorites/styles.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -18,6 +19,8 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  bool isUserPremium = false;
+
   late BannerAd bannerAd;
   late List<YoutubeVideo> videos;
 
@@ -53,6 +56,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   checkLocalStorageService() {
     videos = context.watch<LocalStorageService>().favoriteVideos;
+
+    final accessType = context.watch<PlanPurchasesService>().accessType;
+
+    if (accessType != null) {
+      setState(() => isUserPremium = accessType.isNotEmpty);
+    }
   }
 
   @override
@@ -77,12 +86,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Scaffold(
       backgroundColor: blackColor,
       body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(screenBackground),
-              fit: BoxFit.cover,
-            ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(screenBackground),
+            fit: BoxFit.cover,
           ),
+        ),
+        child: Center(
           child: Column(
             children: [
               videos.isNotEmpty
@@ -128,13 +138,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         ],
                       ),
                     ),
-              SizedBox(
-                height: ScreenSize.height(7),
-                width: ScreenSize.screenWidth,
-                child: AdWidget(ad: bannerAd),
-              ),
+              if (!isUserPremium)
+                SizedBox(
+                  height: ScreenSize.height(7),
+                  width: ScreenSize.screenWidth,
+                  child: AdWidget(ad: bannerAd),
+                ),
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

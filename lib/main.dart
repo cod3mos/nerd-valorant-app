@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,15 +22,18 @@ void main() async {
   await Future.wait([
     MongoDatabase.connect(),
     Firebase.initializeApp(),
-    LocalStorageService.init(),
     MobileAds.instance.initialize(),
+    LocalStorageService.initialize(),
   ]);
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => LocalStorageService(), // alterar nome
+          create: (context) => PlanPurchasesService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocalStorageService(),
         ),
         ChangeNotifierProvider(
           create: (context) => NotificationService(
@@ -63,18 +67,15 @@ class _NerdValorantAppState extends State<NerdValorantApp> {
   void initState() {
     super.initState();
 
-    _initializeFirebaseMessaging();
-    _checkNotifications();
+    _initializeServices();
   }
 
-  _initializeFirebaseMessaging() async {
-    await Provider.of<FirebaseMessageService>(context, listen: false)
-        .initialize();
-  }
-
-  _checkNotifications() async {
-    await Provider.of<NotificationService>(context, listen: false)
-        .checkForNotifications();
+  _initializeServices() async {
+    await Future.wait([
+      Provider.of<PlanPurchasesService>(context, listen: false).initialize(),
+      Provider.of<FirebaseMessageService>(context, listen: false).initialize(),
+      Provider.of<NotificationService>(context, listen: false).checkForNotify(),
+    ]);
   }
 
   @override

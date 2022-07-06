@@ -48,5 +48,7 @@ app.*.map.json
 
 
 # Ignore this files
+/android/app/upload-keystore.jks
 /android/app/google-services.json
+/android/key.properties
 /lib/keys/keys.dart

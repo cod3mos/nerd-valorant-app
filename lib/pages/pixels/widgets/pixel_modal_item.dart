@@ -21,14 +21,17 @@ class _PixelModalItemState extends State<PixelModalItem> {
   List<ValorantMap> maps = [
     ValorantMap(name: 'Bind', source: mapBind),
     ValorantMap(name: 'Split', source: mapSplit),
+    ValorantMap(name: 'Pearl', source: mapPearl),
+    ValorantMap(name: 'Haven', source: mapHaven),
     ValorantMap(name: 'Ascent', source: mapAscent),
     ValorantMap(name: 'Breeze', source: mapBreeze),
-    ValorantMap(name: 'IceBox', source: mapIceBox),
+    ValorantMap(name: 'Icebox', source: mapIceBox),
     ValorantMap(name: 'Fracture', source: mapFracture),
   ];
 
   List<ValorantAgent> agents = [
     ValorantAgent(name: 'Jet', source: agentJet),
+    ValorantAgent(name: 'Skye', source: agentSkye),
     ValorantAgent(name: 'Fade', source: agentFade),
     ValorantAgent(name: 'Kayo', source: agentKayo),
     ValorantAgent(name: 'Neon', source: agentNeon),
@@ -41,6 +44,7 @@ class _PixelModalItemState extends State<PixelModalItem> {
     ValorantAgent(name: 'Fenix', source: agentFenix),
     ValorantAgent(name: 'Reyna', source: agentReyna),
     ValorantAgent(name: 'Viper', source: agentViper),
+    ValorantAgent(name: 'Breach', source: agentBreach),
     ValorantAgent(name: 'Cypher', source: agentCypher),
     ValorantAgent(name: 'Chamber', source: agentChamber),
     ValorantAgent(name: 'Killjoy', source: agentKilljoy),
@@ -54,200 +58,209 @@ class _PixelModalItemState extends State<PixelModalItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: blackColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Text(
-              'SELECIONE O MAPA',
-              style: modalTextStyle,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Expanded(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (var map in maps)
-                    InkWell(
-                      onTap: () => setState(() => selectedMap = map),
-                      splashColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenSize.width(2),
-                            ),
-                            child: Container(
-                              width: ScreenSize.width(30),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(map.source),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                    ScreenSize.width(1),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(screenBackground),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Text(
+                'SELECIONE O MAPA',
+                style: modalTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (var map in maps)
+                      InkWell(
+                        onTap: () => setState(() => selectedMap = map),
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ScreenSize.width(2),
+                              ),
+                              child: Container(
+                                width: ScreenSize.width(30),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(map.source),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                      ScreenSize.width(1),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenSize.width(2),
-                            ),
-                            child: Container(
-                              width: ScreenSize.width(30),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: selectedMap == map
-                                      ? [
-                                          Colors.green.withOpacity(0),
-                                          Colors.green.withOpacity(.5),
-                                        ]
-                                      : [
-                                          Colors.black.withOpacity(0),
-                                          Colors.black.withOpacity(.8),
-                                        ],
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                    ScreenSize.width(1),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ScreenSize.width(2),
+                              ),
+                              child: Container(
+                                width: ScreenSize.width(30),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: selectedMap == map
+                                        ? [
+                                            Colors.green.withOpacity(0),
+                                            Colors.green.withOpacity(.5),
+                                          ]
+                                        : [
+                                            Colors.black.withOpacity(0),
+                                            Colors.black.withOpacity(.8),
+                                          ],
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                      ScreenSize.width(1),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Text(
-                            map.name.toUpperCase(),
-                            style: legendMapTextStyle,
-                          )
-                        ],
+                            Text(
+                              map.name.toUpperCase(),
+                              style: legendMapTextStyle,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Text(
-              'SELECIONE O AGENTE',
-              style: modalTextStyle,
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Expanded(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Text(
+                'SELECIONE O AGENTE',
+                style: modalTextStyle,
+              ),
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (var agent in agents)
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenSize.width(1),
+                        ),
+                        child: InkWell(
+                          onTap: () => setState(() => selectedAgent = agent),
+                          splashColor: greenColor,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              ScreenSize.width(10),
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: ScreenSize.width(10),
+                            backgroundColor: selectedAgent == agent
+                                ? greenColor
+                                : whiteColor,
+                            backgroundImage: AssetImage(
+                              agent.source,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Text(
+                'VOCÊ ESTÁ?',
+                style: modalTextStyle,
+              ),
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  for (var agent in agents)
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenSize.width(1),
-                      ),
-                      child: InkWell(
-                        onTap: () => setState(() => selectedAgent = agent),
-                        splashColor: greenColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(
-                            ScreenSize.width(10),
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: ScreenSize.width(10),
-                          backgroundColor:
-                              selectedAgent == agent ? greenColor : whiteColor,
-                          backgroundImage: AssetImage(
-                            agent.source,
-                          ),
-                        ),
-                      ),
+                  ElevatedButton.icon(
+                    onPressed: () => widget.filter(
+                      [selectedAgent.name, selectedMap.name, 'Atacando'],
                     ),
+                    icon: SvgPicture.asset(iconSword, height: 30),
+                    label: Text(
+                      '      ATACANDO      ',
+                      style: buttonFilterTextStyle,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: whiteColor,
+                      onPrimary: blackColor,
+                      padding: const EdgeInsets.all(10),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => widget.filter(
+                      [selectedAgent.name, selectedMap.name, 'Defendendo'],
+                    ),
+                    icon: const Icon(
+                      Ionicons.shield_outline,
+                      size: 30,
+                    ),
+                    label: Text(
+                      'DEFENDENDO',
+                      style: buttonFilterTextStyle,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: whiteColor,
+                      onPrimary: blackColor,
+                      padding: const EdgeInsets.all(10),
+                    ),
+                  ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Text(
-              'VOCÊ ESTÁ?',
-              style: modalTextStyle,
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => widget.filter(
-                    [selectedAgent.name, selectedMap.name, 'Atacando'],
-                  ),
-                  icon: SvgPicture.asset(iconSword, height: 30),
-                  label: Text(
-                    '      ATACANDO      ',
-                    style: buttonFilterTextStyle,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: whiteColor,
-                    onPrimary: blackColor,
-                    padding: const EdgeInsets.all(10),
-                  ),
+              SizedBox(
+                height: ScreenSize.height(2),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => widget.filter(['']),
+                icon: const Icon(
+                  Ionicons.trash_outline,
                 ),
-                ElevatedButton.icon(
-                  onPressed: () => widget.filter(
-                    [selectedAgent.name, selectedMap.name, 'Defendendo'],
-                  ),
-                  icon: const Icon(
-                    Ionicons.shield_outline,
-                    size: 30,
-                  ),
-                  label: Text(
-                    'DEFENDENDO',
-                    style: buttonFilterTextStyle,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: whiteColor,
-                    onPrimary: blackColor,
-                    padding: const EdgeInsets.all(10),
-                  ),
+                label: Text(
+                  'LIMPAR FILTRO',
+                  style: buttonClearFilterTextStyle,
                 ),
-              ],
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => widget.filter(['']),
-              icon: const Icon(
-                Ionicons.trash_outline,
+                style: ElevatedButton.styleFrom(
+                  primary: greenColor,
+                  onPrimary: whiteColor,
+                ),
               ),
-              label: Text(
-                'LIMPAR FILTRO',
-                style: buttonClearFilterTextStyle,
+              SizedBox(
+                height: ScreenSize.height(2),
               ),
-              style: ElevatedButton.styleFrom(
-                primary: greenColor,
-                onPrimary: whiteColor,
-              ),
-            ),
-            SizedBox(
-              height: ScreenSize.height(2),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

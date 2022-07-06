@@ -20,3 +20,48 @@ final textBoldStyle = TextStyle(
   fontFamily: 'Roboto',
   fontSize: ScreenSize.adaptiveFontSize(4),
 );
+
+final titlePlanStyle = TextStyle(
+  fontFamily: 'Viga',
+  color: whiteColor,
+  fontSize: ScreenSize.adaptiveFontSize(5),
+);
+
+final timePlanStyle = TextStyle(
+  fontFamily: 'Roboto',
+  color: whiteColor,
+  fontWeight: FontWeight.w300,
+  fontSize: ScreenSize.adaptiveFontSize(5),
+);
+
+final pricePlanStyle = TextStyle(
+  fontFamily: 'Roboto',
+  color: greenColor,
+  fontWeight: FontWeight.bold,
+  fontSize: ScreenSize.adaptiveFontSize(7.5),
+);
+
+final charPricePlanStyle = TextStyle(
+  fontFamily: 'Roboto',
+  color: greenColor,
+  fontWeight: FontWeight.bold,
+  fontSize: ScreenSize.adaptiveFontSize(5),
+);
+
+final descriptionPlanStyle = TextStyle(
+  fontFamily: 'Roboto',
+  color: whiteColor,
+  fontSize: ScreenSize.adaptiveFontSize(2.6),
+);
+
+final textPremiumStyle = TextStyle(
+  color: whiteColor,
+  fontFamily: 'Roboto',
+  fontSize: ScreenSize.adaptiveFontSize(4),
+);
+
+final textPremiumBoldStyle = TextStyle(
+  color: blueColor,
+  fontFamily: 'Roboto',
+  fontSize: ScreenSize.adaptiveFontSize(4),
+);

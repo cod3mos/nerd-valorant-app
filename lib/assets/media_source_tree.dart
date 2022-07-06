@@ -29,7 +29,6 @@ String stickerBrim = 'assets/images/stickers/agent_brim.png';
 String stickerOmen = 'assets/images/stickers/agent_omen.png';
 String stickerSage = 'assets/images/stickers/agent_sage.png';
 String stickerSova = 'assets/images/stickers/agent_sova.png';
-String stickerViper = 'assets/images/stickers/agent_viper.png';
 String stickerCypher = 'assets/images/stickers/agent_cypher.png';
 String stickerKilljoy = 'assets/images/stickers/agent_killjoy.png';
 
@@ -38,6 +37,7 @@ String appNerdValorant = 'assets/app/icon_foreground.png';
 
 // Profiles
 String agentJet = 'assets/images/profiles/jet.png';
+String agentSkye = 'assets/images/profiles/skye.png';
 String agentFade = 'assets/images/profiles/fade.png';
 String agentKayo = 'assets/images/profiles/kayo.png';
 String agentNeon = 'assets/images/profiles/neon.png';
@@ -50,6 +50,7 @@ String agentAstra = 'assets/images/profiles/astra.png';
 String agentReyna = 'assets/images/profiles/reyna.png';
 String agentViper = 'assets/images/profiles/viper.png';
 String agentFenix = 'assets/images/profiles/fenix.png';
+String agentBreach = 'assets/images/profiles/breach.png';
 String agentCypher = 'assets/images/profiles/cypher.png';
 String agentKilljoy = 'assets/images/profiles/killjoy.png';
 String agentChamber = 'assets/images/profiles/chamber.png';
@@ -57,7 +58,9 @@ String agentBrimstone = 'assets/images/profiles/brimstone.png';
 
 // Maps
 String mapBind = 'assets/images/maps/bind.png';
+String mapPearl = 'assets/images/maps/pearl.png';
 String mapSplit = 'assets/images/maps/split.png';
+String mapHaven = 'assets/images/maps/haven.png';
 String mapAscent = 'assets/images/maps/ascent.png';
 String mapBreeze = 'assets/images/maps/breeze.png';
 String mapIceBox = 'assets/images/maps/icebox.png';

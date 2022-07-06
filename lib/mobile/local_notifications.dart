@@ -30,7 +30,7 @@ class NotificationService extends ChangeNotifier {
     }
   }
 
-  checkForNotifications() async {
+  Future<void> checkForNotify() async {
     final details = await localNotifications.getNotificationAppLaunchDetails();
 
     if (details != null && details.didNotificationLaunchApp) {

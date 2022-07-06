@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
+import 'package:provider/provider.dart';
 import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/DB/mongo_database.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
@@ -13,7 +15,6 @@ import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_modal_item.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_video_item.dart';
 import 'package:nerdvalorant/pages/pixels/widgets/pixel_banner_item.dart';
-import 'package:provider/provider.dart';
 
 class PixelsPage extends StatefulWidget {
   const PixelsPage({Key? key}) : super(key: key);
@@ -27,10 +28,12 @@ class _PixelsPageState extends State<PixelsPage> {
   int videoCount = 0;
   bool isLoading = true;
   RewardedAd? rewardedAd;
-  late BannerAd bannerAd;
   YoutubeChannel? channel;
-  late AdRequest adRequest;
+  bool isUserPremium = false;
   List<String> querySearch = [];
+
+  late BannerAd bannerAd;
+  late AdRequest adRequest;
   late List<YoutubeVideo> videos;
 
   @override
@@ -78,7 +81,7 @@ class _PixelsPageState extends State<PixelsPage> {
   void showRewarded(YoutubeVideo video) {
     int isFavorite = videos.indexWhere((item) => item.videoId == video.videoId);
 
-    if (rewardedAd != null && isFavorite == -1) {
+    if (rewardedAd != null && isFavorite == -1 && !isUserPremium) {
       rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (RewardedAd ad) {},
         onAdDismissedFullScreenContent: (RewardedAd ad) {
@@ -94,6 +97,7 @@ class _PixelsPageState extends State<PixelsPage> {
       );
 
       rewardedAd!.setImmersiveMode(true);
+
       rewardedAd!.show(
         onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
           setState(() => video.favorited = isFavorite != -1);
@@ -103,6 +107,12 @@ class _PixelsPageState extends State<PixelsPage> {
           context.read<LocalStorageService>().writeFavoriteVideos(videos);
         },
       );
+    } else if (isUserPremium && isFavorite == -1) {
+      setState(() => video.favorited = isFavorite != -1);
+
+      isFavorite == -1 ? videos.add(video) : videos.removeAt(isFavorite);
+
+      context.read<LocalStorageService>().writeFavoriteVideos(videos);
     } else {
       videos.removeAt(isFavorite);
       context.read<LocalStorageService>().writeFavoriteVideos(videos);
@@ -159,6 +169,12 @@ class _PixelsPageState extends State<PixelsPage> {
 
   checkLocalStorageService() {
     videos = context.watch<LocalStorageService>().favoriteVideos;
+
+    final accessType = context.watch<PlanPurchasesService>().accessType;
+
+    if (accessType != null) {
+      setState(() => isUserPremium = accessType.isNotEmpty);
+    }
   }
 
   @override
@@ -192,11 +208,12 @@ class _PixelsPageState extends State<PixelsPage> {
           child: Column(
             children: [
               PixelBannerItem(channel: channel),
-              SizedBox(
-                height: ScreenSize.height(7),
-                width: ScreenSize.screenWidth,
-                child: AdWidget(ad: bannerAd),
-              ),
+              if (!isUserPremium)
+                SizedBox(
+                  height: ScreenSize.height(7),
+                  width: ScreenSize.screenWidth,
+                  child: AdWidget(ad: bannerAd),
+                ),
               channel != null && !isLoading
                   ? channel!.videos.isNotEmpty
                       ? Expanded(
@@ -287,7 +304,6 @@ class _PixelsPageState extends State<PixelsPage> {
 
   Future showFilter() async {
     await showModalBottomSheet(
-      backgroundColor: Colors.red,
       context: context,
       builder: (context) => SizedBox(
         height: ScreenSize.height(65),

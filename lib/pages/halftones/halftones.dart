@@ -5,12 +5,14 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/DB/mongo_database.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/halftones/styles.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/DB/models/halftones_collection.dart';
 import 'package:nerdvalorant/pages/halftones/widgets/halftones_banner_item.dart';
+import 'package:provider/provider.dart';
 
 class HalftonesPage extends StatefulWidget {
   const HalftonesPage({Key? key}) : super(key: key);
@@ -20,8 +22,10 @@ class HalftonesPage extends StatefulWidget {
 }
 
 class _HalftonesPageState extends State<HalftonesPage> {
-  late List<HalftonesCollection> halftones = [];
+  bool isUserPremium = false;
+
   late BannerAd bannerAd;
+  late List<HalftonesCollection> halftones = [];
 
   @override
   void initState() {
@@ -54,6 +58,14 @@ class _HalftonesPageState extends State<HalftonesPage> {
     super.dispose();
   }
 
+  checkLocalStorageService() {
+    final accessType = context.watch<PlanPurchasesService>().accessType;
+
+    if (accessType != null) {
+      setState(() => isUserPremium = accessType.isNotEmpty);
+    }
+  }
+
   _halftonesList() async {
     final response = await MongoDatabase.fetchHalftones();
 
@@ -62,6 +74,8 @@ class _HalftonesPageState extends State<HalftonesPage> {
 
   @override
   Widget build(BuildContext context) {
+    checkLocalStorageService();
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: blackColor,
@@ -192,11 +206,12 @@ class _HalftonesPageState extends State<HalftonesPage> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: ScreenSize.height(7),
-                width: ScreenSize.screenWidth,
-                child: AdWidget(ad: bannerAd),
-              ),
+              if (!isUserPremium)
+                SizedBox(
+                  height: ScreenSize.height(7),
+                  width: ScreenSize.screenWidth,
+                  child: AdWidget(ad: bannerAd),
+                ),
             ],
           ),
         ),

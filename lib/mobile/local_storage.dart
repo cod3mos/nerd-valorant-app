@@ -11,7 +11,7 @@ String notifications = 'local_notifications';
 class LocalStorageService extends ChangeNotifier {
   static late SharedPreferences _localStorage;
 
-  static Future init() async {
+  static Future initialize() async {
     _localStorage = await SharedPreferences.getInstance();
   }
 
