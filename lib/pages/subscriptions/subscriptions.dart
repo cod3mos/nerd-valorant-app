@@ -42,10 +42,12 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
       int index =
           packages.indexWhere((item) => item.product.identifier == accessType);
 
-      setState(() {
-        isUserPremium = accessType.isNotEmpty;
-        planAmount = packages[index].product.priceString;
-      });
+      if (packages.isNotEmpty) {
+        setState(() {
+          isUserPremium = accessType.isNotEmpty;
+          planAmount = packages[index].product.priceString;
+        });
+      }
     }
   }
 

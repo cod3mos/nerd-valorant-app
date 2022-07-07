@@ -6,7 +6,21 @@ Aplicativo que fornece pixels estratégicos aos jogadores de valorant.
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-`API_KEY`
+`youtubeChannelId`
+
+`youtubeApiKey`
+
+`bannerAdKey`
+
+`rewardedAdKey`
+
+`access`
+
+`permissions`
+
+`mongoUrl`
+
+`purchaseSecretApiKey`
 
 ## Mapa de Responsividade
 
@@ -31,7 +45,11 @@ Para suporte, mande um email para contato@codemos.com.br.
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
-## Funcionalidades a serem implementadas
+## TODO
 
-- Tornar o icone de notificação da tela de pixels funcional.
 - Adicionar botão de reporte para quando o pixel estiver desatualizado.
+- Verificar se o email que assinou o premium é igual ao do logado atualmente.
+- Revisar o aplicativo.
+- Atualizar a tela de release das midias sociais e do github.
+- Atualizar a data de lançamento do aplicativo.
+- Adicionar a lista de pré-lançamento os email cadastrados, junto ao acesso do app.

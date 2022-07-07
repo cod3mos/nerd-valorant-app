@@ -14,7 +14,7 @@ class PlanPurchasesService extends ChangeNotifier {
   }
 
   Future _listenPurchases() async {
-    Purchases.addPurchaserInfoUpdateListener((purchaserInfo) async {
+    Purchases.addPurchaserInfoUpdateListener((_) async {
       PurchaserInfo purchasesInfo = await Purchases.getPurchaserInfo();
 
       final entitlements = purchasesInfo.entitlements.active.values.toList();
