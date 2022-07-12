@@ -40,6 +40,8 @@ class _PixelsPageState extends State<PixelsPage> {
   void initState() {
     super.initState();
 
+    _initializePlanPurchasesService();
+
     _fetchChannel();
 
     adRequest = const AdRequest(keywords: ['games', 'valorant']);
@@ -64,7 +66,11 @@ class _PixelsPageState extends State<PixelsPage> {
     initializeRewardedAd();
   }
 
-  void initializeRewardedAd() {
+  _initializePlanPurchasesService() {
+    context.read<PlanPurchasesService>().fetchOffers();
+  }
+
+  initializeRewardedAd() {
     RewardedAdLoadCallback rewardAd = RewardedAdLoadCallback(onAdLoaded: (ad) {
       rewardedAd = ad;
     }, onAdFailedToLoad: (LoadAdError error) {
@@ -78,7 +84,7 @@ class _PixelsPageState extends State<PixelsPage> {
     );
   }
 
-  void showRewarded(YoutubeVideo video) {
+  showRewarded(YoutubeVideo video) {
     int isFavorite = videos.indexWhere((item) => item.videoId == video.videoId);
 
     if (rewardedAd != null && isFavorite == -1 && !isUserPremium) {

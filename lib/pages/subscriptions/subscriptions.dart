@@ -22,15 +22,6 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
   List<Offering> offering = [];
   String planAmount = 'R\$ 0,00';
 
-  @override
-  void initState() {
-    super.initState();
-
-    _fetchOffering();
-  }
-
-  _fetchOffering() => context.read<PlanPurchasesService>().fetchOffers();
-
   checkPlanPurchasesService() {
     offering = context.watch<PlanPurchasesService>().offering;
 
