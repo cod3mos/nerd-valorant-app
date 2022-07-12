@@ -43,13 +43,3 @@ Para suporte, mande um email para contato@codemos.com.br.
 ## Licença
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-
-## TODO
-
-- Adicionar botão de reporte para quando o pixel estiver desatualizado.
-- Verificar se o email que assinou o premium é igual ao do logado atualmente.
-- Revisar o aplicativo.
-- Atualizar a tela de release das midias sociais e do github.
-- Atualizar a data de lançamento do aplicativo.
-- Adicionar a lista de pré-lançamento os email cadastrados, junto ao acesso do app.
