@@ -9,19 +9,17 @@ class LoadingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(greenColor),
-          ),
-          SizedBox(
-            height: ScreenSize.height(5),
-          ),
-          text,
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(greenColor),
+        ),
+        SizedBox(
+          height: ScreenSize.height(5),
+        ),
+        text,
+      ],
     );
   }
 }

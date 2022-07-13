@@ -257,7 +257,7 @@ class _PixelModalItemState extends State<PixelModalItem> {
                 ),
               ),
               SizedBox(
-                height: ScreenSize.height(2),
+                height: ScreenSize.height(1),
               ),
             ],
           ),

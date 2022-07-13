@@ -229,14 +229,10 @@ class _HalftonesPageState extends State<HalftonesPage> {
       SnackBar(
         content: Text(
           'Retícula ${halftoneCode.name} foi copiada com sucesso!',
-          style: TextStyle(
-            color: whiteColor,
-          ),
+          style: TextStyle(color: whiteColor),
         ),
         backgroundColor: greenColor,
-        duration: const Duration(
-          seconds: 2,
-        ),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

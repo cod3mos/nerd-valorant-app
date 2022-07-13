@@ -315,10 +315,12 @@ class _PixelsPageState extends State<PixelsPage> {
                             ],
                           ),
                         )
-                  : LoadingItem(
-                      text: Text(
-                        'Buscando pixels...',
-                        style: loadingTextStyle,
+                  : Expanded(
+                      child: LoadingItem(
+                        text: Text(
+                          'Buscando pixels...',
+                          style: loadingTextStyle,
+                        ),
                       ),
                     ),
             ],
