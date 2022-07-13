@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nerdvalorant/keys/keys.dart';
+import 'package:nerdvalorant/routes/routes.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 enum AccessType { free, monthly, yearly }
@@ -8,6 +10,7 @@ enum AccessType { free, monthly, yearly }
 class PlanPurchasesService extends ChangeNotifier {
   List<Offering> offering = [];
   String? accessType;
+  bool waitingPayment = false;
 
   PlanPurchasesService() {
     _listenPurchases();
@@ -15,6 +18,10 @@ class PlanPurchasesService extends ChangeNotifier {
 
   Future _listenPurchases() async {
     Purchases.addPurchaserInfoUpdateListener((_) async {
+      waitingPayment = true;
+
+      notifyListeners();
+
       PurchaserInfo purchasesInfo = await Purchases.getPurchaserInfo();
 
       final entitlements = purchasesInfo.entitlements.active.values.toList();
@@ -23,7 +30,10 @@ class PlanPurchasesService extends ChangeNotifier {
         accessType = entitlements.first.productIdentifier;
       }
 
-      notifyListeners();
+      Timer(const Duration(milliseconds: 1500), () {
+        waitingPayment = false;
+        notifyListeners();
+      });
     });
   }
 
@@ -45,17 +55,25 @@ class PlanPurchasesService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> signPlan(Package plan) async {
+  Future<void> signPlan(Package plan) async {
     try {
       await Purchases.purchasePackage(plan);
+    } on PlatformException catch (error) {
+      if (error.code != '1' && error.code != '6') {
+        final context = Routes.navigatorKey.currentContext!;
 
-      notifyListeners();
-
-      return true;
-    } catch (e) {
-      notifyListeners();
-
-      return false;
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Não foi possível processar a sua solicitação, tente novamente em alguns minutos.',
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 4),
+          ),
+        );
+      }
     }
   }
 }
