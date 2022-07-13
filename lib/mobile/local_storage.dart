@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 
 String seenIntro = 'seenIntro';
 String videos = 'favorite_videos';

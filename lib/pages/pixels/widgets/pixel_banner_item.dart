@@ -1,14 +1,14 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-import 'package:nerdvalorant/DB/models/videos_collection.dart';
-import 'package:nerdvalorant/mobile/local_storage.dart';
-import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
+import 'package:nerdvalorant/mobile/local_storage.dart';
+import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
+import 'package:nerdvalorant/DB/models/videos_collection.dart';
 
 class PixelBannerItem extends StatefulWidget {
   const PixelBannerItem({Key? key, required this.channel}) : super(key: key);

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/mobile/local_storage.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
@@ -7,7 +8,6 @@ import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:nerdvalorant/pages/notifications/styles.dart';
 import 'package:nerdvalorant/pages/notifications/widgets/notify_message.dart';
-import 'package:provider/provider.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);

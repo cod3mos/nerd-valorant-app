@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:provider/provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/links.dart';
@@ -8,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/profile/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
+import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 import 'package:cached_network_image/cached_network_image.dart';

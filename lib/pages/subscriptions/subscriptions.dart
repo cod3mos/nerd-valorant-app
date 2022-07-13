@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
-import 'package:nerdvalorant/pages/subscriptions/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
+import 'package:nerdvalorant/widgets/loading_item.dart';
 import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
-import 'package:nerdvalorant/widgets/loading_item.dart';
-import 'package:provider/provider.dart';
+import 'package:nerdvalorant/pages/subscriptions/styles.dart';
+import 'package:purchases_flutter/models/package_wrapper.dart';
 import 'package:purchases_flutter/models/offering_wrapper.dart';
 import 'package:nerdvalorant/pages/subscriptions/widgets/subscriptions_modal_item.dart';
-import 'package:purchases_flutter/models/package_wrapper.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({Key? key}) : super(key: key);
