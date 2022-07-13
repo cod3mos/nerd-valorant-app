@@ -24,16 +24,17 @@ class MongoDatabase {
 
     final int videoCount = await videoCollection.count();
 
-    final videos = await fetchVideos(0, []);
+    final result = await fetchVideos(0, []);
 
     return YoutubeChannel(
-      videos: videos,
+      videos: result['videos'],
       title: 'NerdValorant',
       videoCount: videoCount,
     );
   }
 
-  static Future<List<YoutubeVideo>> fetchVideos(int pg, List<String> qr) async {
+  static Future<Map<String, dynamic>> fetchVideos(
+      int pg, List<String> qr) async {
     int limit = 10;
     int skip = limit * pg;
 
@@ -47,8 +48,12 @@ class MongoDatabase {
       query = where.all('key_words', qr).skip(skip).limit(limit);
     }
 
+    int totalVideosFound = await videoCollection.count(query);
     List videos = await videoCollection.find(query).toList();
 
-    return videos.map((item) => YoutubeVideo.fromDB(item)).toList();
+    return {
+      'videos': videos.map((item) => YoutubeVideo.fromDB(item)).toList(),
+      'totalVideosFound': totalVideosFound
+    };
   }
 }

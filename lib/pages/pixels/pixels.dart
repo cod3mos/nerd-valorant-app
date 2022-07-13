@@ -150,18 +150,38 @@ class _PixelsPageState extends State<PixelsPage> {
   searchVideos(List<String> search) async {
     setState(() => isLoading = true);
 
-    final videos = await MongoDatabase.fetchVideos(0, search);
+    final result = await MongoDatabase.fetchVideos(0, search);
+
+    if (result['totalVideosFound'] > 0) {
+      halftoneCopied(result['totalVideosFound']);
+    }
 
     setState(() {
-      channel!.videos = videos;
+      channel!.videos = result['videos'];
+      querySearch = search;
       isLoading = false;
+      page = 1;
     });
   }
 
+  halftoneCopied(int totalVideosFound) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$totalVideosFound resultados encontrados',
+          style: TextStyle(color: whiteColor),
+        ),
+        backgroundColor: appBarColor.withOpacity(.8),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
   loadMoreVideos(int currentPage) async {
-    List<YoutubeVideo> videos =
-        await MongoDatabase.fetchVideos(currentPage, querySearch);
-    List<YoutubeVideo> videoList = channel!.videos..addAll(videos);
+    final result = await MongoDatabase.fetchVideos(currentPage, querySearch);
+
+    List<YoutubeVideo> videoList = channel!.videos..addAll(result['videos']);
 
     setState(() {
       channel!.videos = videoList;
@@ -311,17 +331,18 @@ class _PixelsPageState extends State<PixelsPage> {
   Future showFilter() async {
     await showModalBottomSheet(
       context: context,
-      builder: (context) => SizedBox(
-        height: ScreenSize.height(65),
-        child: PixelModalItem(
-          filter: (List<String> search) {
-            Navigator.pop(context);
+      builder: (context) => SafeArea(
+        child: SizedBox(
+          height: ScreenSize.height(65),
+          child: PixelModalItem(
+            filter: (List<String> search) {
+              Navigator.pop(context);
 
-            search.removeWhere((item) => [''].contains(item));
+              search.removeWhere((item) => [''].contains(item));
 
-            searchVideos(search);
-            setState(() => querySearch = search);
-          },
+              searchVideos(search);
+            },
+          ),
         ),
       ),
     );
