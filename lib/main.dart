@@ -91,9 +91,9 @@ class _NerdValorantAppState extends State<NerdValorantApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: Routes.list,
-      initialRoute: Routes.initialRoute,
+      home: const VerifyAuth(),
       navigatorKey: Routes.navigatorKey,
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }

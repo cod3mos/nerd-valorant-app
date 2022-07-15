@@ -1,14 +1,16 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nerdvalorant/keys/keys.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
 import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/DB/models/videos_collection.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
-class PixelVideoItem extends StatelessWidget {
+class PixelVideoItem extends StatefulWidget {
   const PixelVideoItem({
     Key? key,
     required this.video,
@@ -21,6 +23,13 @@ class PixelVideoItem extends StatelessWidget {
   final bool favoriteMode;
   final YoutubeVideo video;
   final Function(YoutubeVideo) onFavorite;
+
+  @override
+  State<PixelVideoItem> createState() => _PixelVideoItemState();
+}
+
+class _PixelVideoItemState extends State<PixelVideoItem> {
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +47,22 @@ class PixelVideoItem extends StatelessWidget {
       return DateFormat('dd/MM/yyyy').format(date);
     }
 
-    sharedPixel(YoutubeVideo video) {
+    Future sharedPixel(YoutubeVideo video) async {
+      final DynamicLinkParameters params = DynamicLinkParameters(
+        link: Uri.parse(baseUrl + pathWithParameters + video.videoId),
+        uriPrefix: baseUrl,
+        androidParameters: AndroidParameters(
+          packageName: packageName,
+          minimumVersion: 0,
+        ),
+      );
+
+      final link = await FirebaseDynamicLinks.instance.buildShortLink(params);
+
       FlutterShare.share(
         title: video.title,
         text:
-            'Baixe o app Nerd Valorant para ver todos os pixels disponíveis\n\nhttps://www.youtube.com/watch?v=${video.videoId}_channel=$title',
+            'Olha só esse pixel de ${video.title.split(' | ')[0].toLowerCase()} no mapa ${video.title.split(' | ')[1].toLowerCase()} que eu vi no aplicativo *Nerd Valorant*\n ${link.shortUrl.toString()}',
       );
     }
 
@@ -67,7 +87,7 @@ class PixelVideoItem extends StatelessWidget {
                 height: ScreenSize.height(27),
                 width: ScreenSize.screenWidth,
                 image: CachedNetworkImageProvider(
-                  video.tumbnail,
+                  widget.video.tumbnail,
                 ),
               ),
               SizedBox(
@@ -106,7 +126,7 @@ class PixelVideoItem extends StatelessWidget {
                                   image: DecorationImage(
                                     image: AssetImage(
                                       agentImage(
-                                        video.title,
+                                        widget.video.title,
                                       ),
                                     ),
                                     alignment: Alignment.center,
@@ -132,13 +152,13 @@ class PixelVideoItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                removeFirstName(video.title),
+                                removeFirstName(widget.video.title),
                                 maxLines: 1,
                                 overflow: TextOverflow.clip,
                                 style: titleTextStyle,
                               ),
                               Text(
-                                'Publicado em ${publishedAt(video.publishedAt)}',
+                                'Publicado em ${publishedAt(widget.video.publishedAt)}',
                                 textAlign: TextAlign.left,
                                 style: publishedAtTextStyle,
                               ),
@@ -152,30 +172,36 @@ class PixelVideoItem extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          !favoriteMode
-                              ? video.favorited
+                          !widget.favoriteMode
+                              ? widget.video.favorited
                                   ? IconButton(
                                       icon: const Icon(Ionicons.heart),
                                       color: greenColor,
-                                      onPressed: () => onFavorite(video),
+                                      onPressed: () =>
+                                          widget.onFavorite(widget.video),
                                     )
                                   : IconButton(
                                       icon: const Icon(Ionicons.heart_outline),
                                       color: Colors.white,
-                                      onPressed: () => onFavorite(video),
+                                      onPressed: () =>
+                                          widget.onFavorite(widget.video),
                                     )
                               : IconButton(
                                   icon: const Icon(Ionicons.heart_dislike),
                                   color: greenColor,
-                                  onPressed: () => onFavorite(video),
+                                  onPressed: () =>
+                                      widget.onFavorite(widget.video),
                                 ),
                           IconButton(
-                              icon: Icon(
-                                Ionicons.share_social_outline,
-                                color: whiteColor,
-                              ),
-                              color: Colors.white,
-                              onPressed: () => sharedPixel(video)),
+                            icon: Icon(
+                              Ionicons.share_social_outline,
+                              color: whiteColor,
+                            ),
+                            color: Colors.white,
+                            onPressed: () async {
+                              await sharedPixel(widget.video);
+                            },
+                          ),
                         ],
                       ),
                     )
@@ -196,7 +222,7 @@ class PixelVideoItem extends StatelessWidget {
                       ),
                       child: Text(
                         maxLines: 2,
-                        video.description,
+                        widget.video.description,
                         style: descriptionTextStyle,
                         overflow: TextOverflow.clip,
                         textAlign: TextAlign.left,

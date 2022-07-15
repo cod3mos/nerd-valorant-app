@@ -40,9 +40,11 @@ class PlanPurchasesService extends ChangeNotifier {
   Future initialize() async {
     await Purchases.setDebugLogsEnabled(true);
     await Purchases.setup(purchaseSecretApiKey);
+
+    await getCurrentOffers();
   }
 
-  Future<void> fetchOffers() async {
+  Future<void> getCurrentOffers() async {
     try {
       Offerings offerings = await Purchases.getOfferings();
       Offering? currentOfferings = offerings.current;

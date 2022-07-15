@@ -9,7 +9,9 @@ import 'package:nerdvalorant/models/notify_details.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 
 class MoreDetailsPage extends StatefulWidget {
-  const MoreDetailsPage({Key? key}) : super(key: key);
+  const MoreDetailsPage({Key? key, required this.notify}) : super(key: key);
+
+  final NotifyDetails notify;
 
   @override
   State<MoreDetailsPage> createState() => _MoreDetailsPageState();
@@ -21,8 +23,6 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
     ScreenSize.init(context);
 
     initializeDateFormatting('pt_BR', null);
-
-    final notify = ModalRoute.of(context)!.settings.arguments as NotifyDetails;
 
     String formatBR = "dd 'de' MMMM 'de' yyyy";
 
@@ -81,7 +81,8 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
                       height: ScreenSize.height(2),
                     ),
                     Text(
-                      DateFormat(formatBR, 'pt_BR').format(notify.dateTime),
+                      DateFormat(formatBR, 'pt_BR')
+                          .format(widget.notify.dateTime),
                       style: textStyle,
                     ),
                     SizedBox(
@@ -105,7 +106,7 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
                         SizedBox(
                           width: ScreenSize.screenWidth,
                           child: Text(
-                            notify.title,
+                            widget.notify.title,
                             style: textStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -116,7 +117,7 @@ class _MoreDetailsPageState extends State<MoreDetailsPage> {
                         SizedBox(
                           width: ScreenSize.screenWidth,
                           child: Text(
-                            notify.body,
+                            widget.notify.body,
                             style: textStyle,
                             textAlign: TextAlign.center,
                           ),

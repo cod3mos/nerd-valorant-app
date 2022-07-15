@@ -40,8 +40,6 @@ class _PixelsPageState extends State<PixelsPage> {
   void initState() {
     super.initState();
 
-    _initializePlanPurchasesService();
-
     _fetchChannel();
 
     adRequest = const AdRequest(keywords: ['games', 'valorant']);
@@ -64,10 +62,6 @@ class _PixelsPageState extends State<PixelsPage> {
     bannerAd.load();
 
     initializeRewardedAd();
-  }
-
-  _initializePlanPurchasesService() {
-    context.read<PlanPurchasesService>().fetchOffers();
   }
 
   initializeRewardedAd() {

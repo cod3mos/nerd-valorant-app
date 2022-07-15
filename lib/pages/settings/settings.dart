@@ -6,14 +6,19 @@ import 'package:nerdvalorant/themes/global_styles.dart';
 import 'package:nerdvalorant/pages/settings/styles.dart';
 import 'package:nerdvalorant/assets/media_source_tree.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key, required this.userData}) : super(key: key);
 
+  final User userData;
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
-
-    final user = ModalRoute.of(context)?.settings.arguments as User;
 
     return SafeArea(
       child: Scaffold(
@@ -83,7 +88,7 @@ class SettingsPage extends StatelessWidget {
                               style: textStyle,
                             ),
                             Text(
-                              '${user.displayName}',
+                              '${widget.userData.displayName}',
                               style: textBoldStyle,
                             ),
                           ],
@@ -97,7 +102,7 @@ class SettingsPage extends StatelessWidget {
                               style: textStyle,
                             ),
                             Text(
-                              '${user.email}',
+                              '${widget.userData.email}',
                               style: textBoldStyle,
                             ),
                           ],
