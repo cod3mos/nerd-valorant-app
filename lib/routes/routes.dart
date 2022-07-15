@@ -22,28 +22,33 @@ class Routes {
       case '/home':
         return CupertinoPageRoute(builder: (_) => const HomePage());
 
-      case '/settings':
-        return CupertinoPageRoute(
-          builder: (_) =>
-              SettingsPage(userData: routeSettings.arguments as User),
-        );
-
-      case '/more_details':
-        return CupertinoPageRoute(
-          builder: (_) =>
-              MoreDetailsPage(notify: routeSettings.arguments as NotifyDetails),
-        );
-
       case '/notifications':
         return CupertinoPageRoute(builder: (_) => const NotificationsPage());
 
       case '/subscriptions':
         return CupertinoPageRoute(builder: (_) => const SubscriptionsPage());
 
+      case '/settings':
+        return CupertinoPageRoute(
+          builder: (_) {
+            return SettingsPage(userData: routeSettings.arguments as User);
+          },
+        );
+
+      case '/more_details':
+        return CupertinoPageRoute(
+          builder: (_) {
+            return MoreDetailsPage(
+                notify: routeSettings.arguments as NotifyDetails);
+          },
+        );
+
       case '/youtube_player':
         return CupertinoPageRoute(
-          builder: (_) =>
-              YoutubeVideoPlayer(videoId: routeSettings.arguments as String),
+          builder: (_) {
+            return YoutubeVideoPlayer(
+                videoId: routeSettings.arguments as String);
+          },
         );
 
       case '/pixel':

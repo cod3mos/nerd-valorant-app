@@ -87,7 +87,7 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
                 height: ScreenSize.height(27),
                 width: ScreenSize.screenWidth,
                 image: CachedNetworkImageProvider(
-                  widget.video.tumbnail,
+                  'https://i.ytimg.com/vi/${widget.video.videoId}/maxresdefault.jpg',
                 ),
               ),
               SizedBox(

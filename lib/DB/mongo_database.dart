@@ -45,7 +45,7 @@ class MongoDatabase {
     if (qr.isEmpty) {
       query = where.skip(skip).limit(limit);
     } else {
-      query = where.all('key_words', qr).skip(skip).limit(limit);
+      query = where.all('tags', qr).skip(skip).limit(limit);
     }
 
     int totalVideosFound = await videoCollection.count(query);

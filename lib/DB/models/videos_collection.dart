@@ -15,7 +15,6 @@ class YoutubeVideo {
   final String id;
   final String title;
   final String videoId;
-  final String tumbnail;
   final String description;
   final String publishedAt;
 
@@ -25,7 +24,6 @@ class YoutubeVideo {
     required this.id,
     required this.title,
     required this.videoId,
-    required this.tumbnail,
     required this.favorited,
     required this.description,
     required this.publishedAt,
@@ -33,18 +31,16 @@ class YoutubeVideo {
 
   YoutubeVideo.fromDB(Map<String, dynamic> db)
       : id = db['_id'].$oid,
-        title = db['title'],
-        videoId = db['video_id'],
-        tumbnail = db['tumbnail'],
+        title = db['snippet']['title'],
+        videoId = db['id']['videoId'],
         favorited = false,
-        description = db['description'],
-        publishedAt = db['published_at'];
+        description = db['snippet']['description'],
+        publishedAt = db['snippet']['publishedAt'];
 
   YoutubeVideo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
         videoId = json['videoId'],
-        tumbnail = json['tumbnail'],
         favorited = json['favorited'],
         description = json['description'],
         publishedAt = json['publishedAt'];
@@ -53,7 +49,6 @@ class YoutubeVideo {
         'id': id,
         'title': title,
         'videoId': videoId,
-        'tumbnail': tumbnail,
         'favorited': favorited,
         'description': description,
         'publishedAt': publishedAt,
