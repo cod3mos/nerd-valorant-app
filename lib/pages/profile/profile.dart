@@ -188,9 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         onTouch: () => openLink(supportUs),
                       ),
                       ProfileButton(
-                        icon: Ionicons.rocket_outline,
-                        text: 'Novidades da versão',
-                        onTouch: () => openLink(gitHub),
+                        icon: Ionicons.logo_google_playstore,
+                        text: 'Ajude-nos avaliando este app',
+                        onTouch: () => openLink(hateMyAppOnPlayStore),
                       ),
                     ],
                   ),
