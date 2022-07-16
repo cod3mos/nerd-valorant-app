@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nerdvalorant/widgets/rate_app_modal_item.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,7 @@ import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/mobile/local_notifications.dart';
 import 'package:nerdvalorant/services/firebase_messaging.dart';
 import 'package:nerdvalorant/pages/onboarding/onboarding.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,7 +90,6 @@ class _NerdValorantAppState extends State<NerdValorantApp> {
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const VerifyAuth(),
@@ -128,7 +129,11 @@ class _VerifyAuthState extends State<VerifyAuth> {
     if (googleUser == null) {
       return alreadyViewed ? const LoginPage() : const OnboardingPage();
     } else {
-      return const HomePage();
+      return RateAppModalItem(
+        builder: (rateMyApp) {
+          return const HomePage();
+        },
+      );
     }
   }
 }
