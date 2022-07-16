@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nerdvalorant/keys/keys.dart';
+import 'package:nerdvalorant/keys/links.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:nerdvalorant/mobile/screen_size.dart';
 import 'package:nerdvalorant/pages/pixels/styles.dart';
@@ -30,6 +31,7 @@ class PixelVideoItem extends StatefulWidget {
 
 class _PixelVideoItemState extends State<PixelVideoItem> {
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  bool imageError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,17 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
       );
     }
 
+    String makeThumbnailUrl(String id, {bool maxQuality = true}) {
+      final baseUrl = thumbnailInitialUrl.replaceAll('nv-id', id);
+
+      return baseUrl + (maxQuality ? imageMaxQuality : imageHdQuality);
+    }
+
+    ImageProvider _getNetworkImage(String id) {
+      return CachedNetworkImageProvider(makeThumbnailUrl(id, maxQuality: true),
+          errorListener: () => setState(() => imageError = true));
+    }
+
     return Stack(
       children: [
         Container(
@@ -86,9 +99,11 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
                 fit: BoxFit.cover,
                 height: ScreenSize.height(27),
                 width: ScreenSize.screenWidth,
-                image: CachedNetworkImageProvider(
-                  'https://i.ytimg.com/vi/${widget.video.videoId}/maxresdefault.jpg',
-                ),
+                image: imageError
+                    ? CachedNetworkImageProvider(makeThumbnailUrl(
+                        widget.video.videoId,
+                        maxQuality: false))
+                    : _getNetworkImage(widget.video.videoId),
               ),
               SizedBox(
                 height: ScreenSize.height(1),
