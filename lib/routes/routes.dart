@@ -16,11 +16,11 @@ class Routes {
     final routeName = uri.path;
 
     switch (routeName) {
-      case '/verify_auth':
-        return CupertinoPageRoute(builder: (_) => const VerifyAuth());
-
       case '/home':
         return CupertinoPageRoute(builder: (_) => const HomePage());
+
+      case '/verify_auth':
+        return CupertinoPageRoute(builder: (_) => const VerifyAuth());
 
       case '/notifications':
         return CupertinoPageRoute(builder: (_) => const NotificationsPage());
@@ -28,10 +28,21 @@ class Routes {
       case '/subscriptions':
         return CupertinoPageRoute(builder: (_) => const SubscriptionsPage());
 
-      case '/settings':
+      case '/youtube_player':
         return CupertinoPageRoute(
           builder: (_) {
-            return SettingsPage(userData: routeSettings.arguments as User);
+            return YoutubeVideoPlayer(
+              videoId: routeSettings.arguments as String,
+            );
+          },
+        );
+
+      case '/pixel':
+        return CupertinoPageRoute(
+          builder: (_) {
+            return YoutubeVideoPlayer(
+              videoId: params['id']!,
+            );
           },
         );
 
@@ -39,21 +50,18 @@ class Routes {
         return CupertinoPageRoute(
           builder: (_) {
             return MoreDetailsPage(
-                notify: routeSettings.arguments as NotifyDetails);
+              notify: routeSettings.arguments as NotifyDetails,
+            );
           },
         );
 
-      case '/youtube_player':
+      case '/settings':
         return CupertinoPageRoute(
           builder: (_) {
-            return YoutubeVideoPlayer(
-                videoId: routeSettings.arguments as String);
+            return SettingsPage(
+              userData: routeSettings.arguments as User,
+            );
           },
-        );
-
-      case '/pixel':
-        return CupertinoPageRoute(
-          builder: (_) => YoutubeVideoPlayer(videoId: params['id']!),
         );
 
       default:
