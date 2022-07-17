@@ -6,21 +6,27 @@ Aplicativo que fornece pixels estratégicos aos jogadores de valorant.
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-`youtubeChannelId`
+`youtubeChannelId=`
 
-`youtubeApiKey`
+`youtubeApiKey=`
 
-`bannerAdKey`
+`bannerAdKey=`
 
-`rewardedAdKey`
+`rewardedAdKey=`
 
-`access`
+`access=`
 
-`permissions`
+`permissions=`
 
-`mongoUrl`
+`mongoUrl=`
 
-`purchaseSecretApiKey`
+`purchaseSecretApiKey=`
+
+`pathWithParameters=`
+
+`baseUrl=`
+
+`packageName=`
 
 ## Mapa de Responsividade
 
@@ -34,7 +40,6 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 ## Autor
 
 [@DioneCarlos](https://www.github.com/Dione-Carlos)
-
 
 ## Suporte
 
