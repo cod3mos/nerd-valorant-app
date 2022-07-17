@@ -28,7 +28,7 @@ class _RateAppModalItemState extends State<RateAppModalItem> {
         if (rateMyApp.shouldOpenDialog) {
           rateMyApp.showRateDialog(
             context,
-            title: 'Poxa, vida! 3ª vez por aqui, já pode pedir música',
+            title: '3ª vez por aqui, já pode pedir música!',
             message:
                 'Se curtiu este app, por favor reserve um minuto para nos avaliar.\n\nNão se esqueça, é através do seu feedback que conseguimos trazer cada vez mais melhorias.',
             rateButton: 'AVALIAR',

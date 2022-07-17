@@ -50,6 +50,8 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
     }
 
     Future sharedPixel(YoutubeVideo video) async {
+      List<String> title = video.title.split(' | ');
+
       final DynamicLinkParameters params = DynamicLinkParameters(
         link: Uri.parse(baseUrl + pathWithParameters + video.videoId),
         uriPrefix: baseUrl,
@@ -64,7 +66,7 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
       FlutterShare.share(
         title: video.title,
         text:
-            'Olha só esse pixel de ${video.title.split(' | ')[0].toLowerCase()} no mapa ${video.title.split(' | ')[1].toLowerCase()} que eu vi no aplicativo *Nerd Valorant*\n ${link.shortUrl.toString()}',
+            'Olha que massa esse pixel de ${title[0]} no mapa ${title[1]}.\n\nClique e confira: ${link.shortUrl.toString()}.',
       );
     }
 
@@ -207,16 +209,16 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
                                   onPressed: () =>
                                       widget.onFavorite(widget.video),
                                 ),
-                          IconButton(
-                            icon: Icon(
-                              Ionicons.share_social_outline,
-                              color: whiteColor,
-                            ),
-                            color: Colors.white,
-                            onPressed: () async {
-                              await sharedPixel(widget.video);
-                            },
-                          ),
+                          // IconButton(
+                          //   icon: Icon(
+                          //     Ionicons.share_social_outline,
+                          //     color: whiteColor,
+                          //   ),
+                          //   color: Colors.white,
+                          //   onPressed: () async {
+                          //     await sharedPixel(widget.video);
+                          //   },
+                          // ),
                         ],
                       ),
                     )

@@ -189,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       ProfileButton(
                         icon: Ionicons.logo_google_playstore,
-                        text: 'Ajude-nos avaliando este app',
+                        text: 'Avalie nosso app',
                         onTouch: () => openLink(hateMyAppOnPlayStore),
                       ),
                     ],
