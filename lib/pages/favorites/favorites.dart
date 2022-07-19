@@ -131,7 +131,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             height: 30,
                           ),
                           Text(
-                            'Você ainda não adicionou nenhum pixel...',
+                            'Você ainda não favoritou nenhum pixel...',
                             textAlign: TextAlign.center,
                             style: titleStyle,
                           ),

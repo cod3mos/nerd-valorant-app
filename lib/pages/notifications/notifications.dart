@@ -98,7 +98,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   child: notifyDetails.isEmpty
                       ? Center(
                           child: Text(
-                            'Não existem mais notificações :(',
+                            'Não existe notificações no momento.',
                             style: textStyle,
                           ),
                         )
