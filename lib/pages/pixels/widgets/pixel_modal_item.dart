@@ -177,13 +177,22 @@ class _PixelModalItemState extends State<PixelModalItem> {
                               ScreenSize.width(10),
                             ),
                           ),
-                          child: CircleAvatar(
-                            radius: ScreenSize.width(10),
-                            backgroundColor: selectedAgent == agent
-                                ? greenColor
-                                : whiteColor,
-                            backgroundImage: AssetImage(
-                              agent.source,
+                          child: Container(
+                            width: ScreenSize.width(20),
+                            decoration: BoxDecoration(
+                              color: selectedAgent == agent
+                                  ? greenColor
+                                  : blackColor,
+                              image: DecorationImage(
+                                image: AssetImage(agent.source),
+                                fit: BoxFit.cover,
+                                opacity: selectedAgent == agent ? 1.0 : 0.5,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  ScreenSize.width(10),
+                                ),
+                              ),
                             ),
                           ),
                         ),
