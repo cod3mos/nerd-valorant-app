@@ -38,7 +38,7 @@ class PlanPurchasesService extends ChangeNotifier {
   }
 
   Future initialize() async {
-    await Purchases.setDebugLogsEnabled(true);
+    await Purchases.setDebugLogsEnabled(false);
     await Purchases.setup(purchaseSecretApiKey);
 
     await getCurrentOffers();
