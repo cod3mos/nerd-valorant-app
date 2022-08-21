@@ -33,3 +33,15 @@ final halftoneCodeTextStyle = TextStyle(
   fontFamily: 'Roboto',
   fontSize: ScreenSize.adaptiveFontSize(3),
 );
+
+final styleHint = TextStyle(
+  color: Colors.black87,
+  fontFamily: 'Roboto',
+  fontSize: ScreenSize.adaptiveFontSize(4),
+);
+
+final styleActive = TextStyle(
+  color: blackColor,
+  fontFamily: 'Roboto',
+  fontSize: ScreenSize.adaptiveFontSize(4),
+);

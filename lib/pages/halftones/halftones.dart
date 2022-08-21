@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:nerdvalorant/pages/halftones/widgets/search_halftone.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/keys/keys.dart';
 import 'package:nerdvalorant/DB/mongo_database.dart';
@@ -22,10 +23,12 @@ class HalftonesPage extends StatefulWidget {
 }
 
 class _HalftonesPageState extends State<HalftonesPage> {
+  String query = '';
   bool isUserPremium = false;
 
   late BannerAd bannerAd;
   late List<HalftonesCollection> halftones = [];
+  late List<HalftonesCollection> allHalftones = [];
 
   @override
   void initState() {
@@ -69,7 +72,10 @@ class _HalftonesPageState extends State<HalftonesPage> {
   _halftonesList() async {
     final response = await MongoDatabase.fetchHalftones();
 
-    setState(() => halftones = response);
+    setState(() {
+      halftones = response;
+      allHalftones = response;
+    });
   }
 
   @override
@@ -89,6 +95,7 @@ class _HalftonesPageState extends State<HalftonesPage> {
           child: Column(
             children: [
               const HalftonesBannerItem(),
+              makeSearch(),
               Expanded(
                 child: ListView(
                   children: [
@@ -235,5 +242,27 @@ class _HalftonesPageState extends State<HalftonesPage> {
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  Widget makeSearch() {
+    return SearchHalftone(
+      text: query,
+      hintText: 'Nome da Retícula',
+      onChanged: searchHalftone,
+    );
+  }
+
+  searchHalftone(String query) {
+    final halftones = allHalftones.where((HalftonesCollection halftone) {
+      final halftoneNameLower = halftone.name.toLowerCase();
+      final searchLower = query.toLowerCase();
+
+      return halftoneNameLower.contains(searchLower);
+    }).toList();
+
+    setState(() {
+      this.query = query;
+      this.halftones = halftones;
+    });
   }
 }
