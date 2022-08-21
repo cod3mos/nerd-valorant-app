@@ -184,7 +184,7 @@ class _PixelsPageState extends State<PixelsPage> {
   }
 
   openVideo(id) {
-    Navigator.pushNamed(context, '/youtube_player', arguments: id);
+    Navigator.pushNamed(context, '/pixel', arguments: id);
   }
 
   checkLocalStorageService() {

@@ -11,11 +11,7 @@ import 'package:nerdvalorant/pages/notifications/notifications.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
-    final uri = Uri.parse(routeSettings.name!);
-    final params = uri.queryParameters;
-    final routeName = uri.path;
-
-    switch (routeName) {
+    switch (routeSettings.name) {
       case '/home':
         return CupertinoPageRoute(builder: (_) => const HomePage());
 
@@ -28,20 +24,11 @@ class Routes {
       case '/subscriptions':
         return CupertinoPageRoute(builder: (_) => const SubscriptionsPage());
 
-      case '/youtube_player':
-        return CupertinoPageRoute(
-          builder: (_) {
-            return YoutubeVideoPlayer(
-              videoId: routeSettings.arguments as String,
-            );
-          },
-        );
-
       case '/pixel':
         return CupertinoPageRoute(
           builder: (_) {
             return YoutubeVideoPlayer(
-              videoId: params['id']!,
+              videoId: routeSettings.arguments as String,
             );
           },
         );
@@ -65,7 +52,10 @@ class Routes {
         );
 
       default:
-        return CupertinoPageRoute(builder: (_) => const VerifyAuth());
+        return CupertinoPageRoute(
+          builder: (_) => const VerifyAuth(),
+          maintainState: false,
+        );
     }
   }
 

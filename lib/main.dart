@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nerdvalorant/widgets/rate_app_modal_item.dart';
 import 'package:provider/provider.dart';
 import 'package:nerdvalorant/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,16 +13,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:nerdvalorant/services/plan_purchases.dart';
 import 'package:nerdvalorant/services/google_sign_in.dart';
 import 'package:nerdvalorant/mobile/local_notifications.dart';
+import 'package:nerdvalorant/widgets/rate_app_modal_item.dart';
 import 'package:nerdvalorant/services/firebase_messaging.dart';
 import 'package:nerdvalorant/pages/onboarding/onboarding.dart';
-import 'package:rate_my_app/rate_my_app.dart';
+import 'package:nerdvalorant/services/dynamic_link_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   await Future.wait([
     MongoDatabase.connect(),
-    Firebase.initializeApp(),
     MobileAds.instance.initialize(),
     LocalStorageService.initialize(),
   ]);
@@ -36,6 +37,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => LocalStorageService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DynamicLinkService(),
         ),
         ChangeNotifierProvider(
           create: (context) => NotificationService(
@@ -75,6 +79,7 @@ class _NerdValorantAppState extends State<NerdValorantApp> {
   _initializeServices() async {
     await Future.wait([
       Provider.of<PlanPurchasesService>(context, listen: false).initialize(),
+      Provider.of<DynamicLinkService>(context, listen: false).checkForLinks(),
       Provider.of<FirebaseMessageService>(context, listen: false).initialize(),
       Provider.of<NotificationService>(context, listen: false).checkForNotify(),
     ]);
@@ -92,7 +97,7 @@ class _NerdValorantAppState extends State<NerdValorantApp> {
     );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const VerifyAuth(),
+      initialRoute: '/verify_auth',
       navigatorKey: Routes.navigatorKey,
       onGenerateRoute: Routes.generateRoute,
     );

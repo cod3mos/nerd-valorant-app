@@ -69,7 +69,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     checkLocalStorageService();
 
     openVideo(id) {
-      Navigator.pushNamed(context, '/youtube_player', arguments: id);
+      Navigator.pushNamed(context, '/pixel', arguments: id);
     }
 
     favoriteOrDisfavor(YoutubeVideo video) {

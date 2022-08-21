@@ -53,12 +53,9 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
       List<String> title = video.title.split(' | ');
 
       final DynamicLinkParameters params = DynamicLinkParameters(
-        link: Uri.parse(baseUrl + pathWithParameters + video.videoId),
         uriPrefix: baseUrl,
-        androidParameters: AndroidParameters(
-          packageName: packageName,
-          minimumVersion: 0,
-        ),
+        link: Uri.parse(baseUrl + pathWithParameters + video.videoId),
+        androidParameters: AndroidParameters(packageName: packageName),
       );
 
       final link = await FirebaseDynamicLinks.instance.buildShortLink(params);
@@ -209,16 +206,16 @@ class _PixelVideoItemState extends State<PixelVideoItem> {
                                   onPressed: () =>
                                       widget.onFavorite(widget.video),
                                 ),
-                          // IconButton(
-                          //   icon: Icon(
-                          //     Ionicons.share_social_outline,
-                          //     color: whiteColor,
-                          //   ),
-                          //   color: Colors.white,
-                          //   onPressed: () async {
-                          //     await sharedPixel(widget.video);
-                          //   },
-                          // ),
+                          IconButton(
+                            icon: Icon(
+                              Ionicons.share_social_outline,
+                              color: whiteColor,
+                            ),
+                            color: Colors.white,
+                            onPressed: () async {
+                              await sharedPixel(widget.video);
+                            },
+                          ),
                         ],
                       ),
                     )
